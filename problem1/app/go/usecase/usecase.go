@@ -9,6 +9,7 @@ type UserUsecase interface {
 	FindByID(id int) (*model.User, error)
 	FindIDByUserID(userID int) (int, error)
 	FindFriendsByID(id int) ([]*model.User, error)
+	FindFriendOfFriendList(fList []*model.User) ([]*model.User, error)
 }
 
 type userUsecase struct {
@@ -67,4 +68,17 @@ func (uu *userUsecase) FindFriendsByID(id int) ([]*model.User, error) {
 	}
 
 	return uList, nil
+}
+
+func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
+	ffList := make([]*model.User, 0)
+	for _, f := range fList {
+		nfList, err := uu.FindFriendsByID(f.ID)
+		if err != nil {
+			return nil, err
+		}
+		ffList = append(ffList, nfList...)
+	}
+
+	return ffList, nil
 }
