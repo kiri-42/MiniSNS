@@ -83,3 +83,24 @@ func (ur *UserRepository) FindFriendsByID(id int) ([]*model.Link, error) {
 
 	return friends, nil
 }
+
+func (ur *UserRepository) FindBlockList(id int) ([]*model.Link, error) {
+	userID, err := ur.FindUserIDByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := ur.DB.Query(`SELECT * FROM block_list WHERE user1_id = ? || user2_id = ?`, userID, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	bList := make([]*model.Link, 0)
+	for rows.Next() {
+		var b model.Link
+		rows.Scan(&b.ID, &b.User1ID, &b.User2ID)
+		bList = append(bList, &b)
+	}
+
+	return bList, nil
+}

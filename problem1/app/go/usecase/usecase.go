@@ -10,6 +10,8 @@ type UserUsecase interface {
 	FindIDByUserID(userID int) (int, error)
 	FindFriendsByID(id int) ([]*model.User, error)
 	FindFriendOfFriendList(fList []*model.User) ([]*model.User, error)
+	FindFriendListExceptBlock(id int) ([]*model.User, error)
+	rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error)
 }
 
 type userUsecase struct {
@@ -81,4 +83,43 @@ func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.Use
 	}
 
 	return ffList, nil
+}
+
+func (uu *userUsecase) FindFriendListExceptBlock(id int) ([]*model.User, error) {
+	fList, err := uu.FindFriendsByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	bList, err := uu.userRepo.FindBlockList(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return uu.rmBlockUser(fList, bList, id)
+}
+
+func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
+	nList := make([]*model.User, 0)
+	len := len(bList)
+
+	userID, err := uu.userRepo.FindUserIDByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, f := range fList {
+		for i, b := range bList {
+			if b.User1ID == f.UserID && b.User2ID == userID || b.User1ID == userID && b.User2ID == f.UserID {
+				//breakにするべきかも
+				continue
+			}
+
+			if i == len - 1 {
+				nList = append(nList, f)
+			}
+		}
+	}
+
+	return nList, nil
 }

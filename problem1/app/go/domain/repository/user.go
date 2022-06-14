@@ -10,5 +10,6 @@ type UserRepository interface {
 	FindUserIDByID(id int) (int, error)
 	FindIDByUserID(userID int) (int, error)
 	FindFriendsByID(id int) ([]*model.Link, error)
+	FindBlockList(id int) ([]*model.Link, error)
 	// Delete(user *model.User) error
 }
