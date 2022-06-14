@@ -6,6 +6,7 @@ import (
 )
 
 type UserUsecase interface {
+	GetUser(uID int) (*model.User, error)
 	FindByID(id int) (*model.User, error)
 	FindIDByUserID(userID int) (int, error)
 	FindFriendList(id int) ([]*model.User, error)
@@ -23,6 +24,20 @@ type userUsecase struct {
 
 func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	return &userUsecase{userRepo: userRepo}
+}
+
+func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
+	id, err := uu.FindIDByUserID(uID)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := uu.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
 
 func (uu *userUsecase) FindByID(id int) (*model.User, error) {

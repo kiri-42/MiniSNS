@@ -41,12 +41,7 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		id, err := uh.userUsecase.FindIDByUserID(uID)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
-		}
-
-		u, err := uh.userUsecase.FindByID(id)
+		u, err := uh.userUsecase.GetUser(uID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
