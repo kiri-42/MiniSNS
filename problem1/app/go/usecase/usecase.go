@@ -11,7 +11,9 @@ type UserUsecase interface {
 	FindFriendsByID(id int) ([]*model.User, error)
 	FindFriendOfFriendList(fList []*model.User) ([]*model.User, error)
 	FindFriendListExceptBlock(id int) ([]*model.User, error)
+	FindFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error)
 	rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error)
+	rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User)
 }
 
 type userUsecase struct {
@@ -123,4 +125,36 @@ func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id 
 	}
 
 	return nList, nil
+}
+
+func (uu *userUsecase) rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User) {
+	nffList := make([]*model.User, 0)
+
+	for _, ff := range ffList {
+		isFriend := false
+
+		for _, f := range fList {
+			if f.UserID == ff.UserID {
+				isFriend = true
+				break
+			}
+		}
+
+		if !isFriend {
+			nffList = append(nffList, ff)
+		}
+	}
+
+	return nffList
+}
+
+func (uu *userUsecase) FindFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error) {
+	ffList, err := uu.FindFriendOfFriendList(fList)
+	if err != nil {
+		return nil, err
+	}
+
+	ffList = uu.rm1HopFriend(ffList, fList)
+
+	return ffList, nil
 }
