@@ -35,7 +35,12 @@ func (uh *userHandler) Root() echo.HandlerFunc  {
 
 func (uh *userHandler) Get() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id, err := strconv.Atoi(c.Param("id"))
+		userID, err := strconv.Atoi(c.Param("user_id"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		id, err := uh.userUsecase.FindIDByUserID(userID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
