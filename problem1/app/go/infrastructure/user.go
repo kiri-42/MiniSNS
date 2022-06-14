@@ -47,6 +47,22 @@ func (ur *UserRepository) FindUserIDByID(id int) (int, error) {
 	return userID, nil
 }
 
+func (ur *UserRepository) FindIDByUserID(userID int) (int, error) {
+	row, err := ur.DB.Query(`SELECT id FROM users WHERE user_id = ?`, userID)
+	if err != nil {
+		return 0, err
+	}
+
+	var id int
+	row.Next()
+	err = row.Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}
+
 func (ur *UserRepository) FindFriendsByID(id int) ([]*model.Link, error) {
 	userID, err := ur.FindUserIDByID(id)
 	if err != nil {

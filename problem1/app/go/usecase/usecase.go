@@ -7,6 +7,7 @@ import (
 
 type UserUsecase interface {
 	FindByID(id int) (*model.User, error)
+	FindIDByUserID(userID int) (int, error)
 	FindFriendsByID(id int) ([]*model.User, error)
 }
 
@@ -25,6 +26,15 @@ func (uu *userUsecase) FindByID(id int) (*model.User, error) {
 	}
 
 	return foundUser, nil
+}
+
+func (uu *userUsecase) FindIDByUserID(userID int) (int, error) {
+	id, err := uu.userRepo.FindIDByUserID(userID)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }
 
 func (uu *userUsecase) FindFriendsByID(id int) ([]*model.User, error) {

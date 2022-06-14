@@ -56,7 +56,12 @@ func (uh *userHandler) Get() echo.HandlerFunc {
 
 func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		id, err := strconv.Atoi(c.Param("id"))
+		userID, err := strconv.Atoi(c.Param("user_id"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		id, err := uh.userUsecase.FindIDByUserID(userID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
@@ -78,3 +83,13 @@ func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, res)
 	}
 }
+
+// func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
+// 	return func(c echo.Context) error {
+// 		id, err := strconv.Atoi(c.Param("id"))
+// 		if err != nil {
+// 			return c.JSON(http.StatusInternalServerError, err.Error())
+// 		}
+
+// 	}
+// }
