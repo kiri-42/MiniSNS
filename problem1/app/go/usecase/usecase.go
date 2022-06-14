@@ -8,7 +8,7 @@ import (
 type UserUsecase interface {
 	FindByID(id int) (*model.User, error)
 	FindIDByUserID(userID int) (int, error)
-	FindFriendsByID(id int) ([]*model.User, error)
+	FindFriendList(id int) ([]*model.User, error)
 	FindFriendOfFriendList(fList []*model.User) ([]*model.User, error)
 	FindFriendListExceptBlock(id int) ([]*model.User, error)
 	FindFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error)
@@ -42,7 +42,7 @@ func (uu *userUsecase) FindIDByUserID(userID int) (int, error) {
 	return id, nil
 }
 
-func (uu *userUsecase) FindFriendsByID(id int) ([]*model.User, error) {
+func (uu *userUsecase) FindFriendList(id int) ([]*model.User, error) {
 	foundFriends, err := uu.userRepo.FindFriendsByID(id)
 	if err != nil {
 		return nil, err
@@ -88,7 +88,7 @@ func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.Use
 }
 
 func (uu *userUsecase) FindFriendListExceptBlock(id int) ([]*model.User, error) {
-	fList, err := uu.FindFriendsByID(id)
+	fList, err := uu.FindFriendList(id)
 	if err != nil {
 		return nil, err
 	}
