@@ -8,6 +8,12 @@ type User struct {
 	Name   string
 }
 
+type Link struct {
+	ID      int
+	User1ID int
+	User2ID int
+}
+
 // NewUser userのコンストラクタ
 // user_idは重複しないようにランダムな数値にする
 // nameもユニークにする

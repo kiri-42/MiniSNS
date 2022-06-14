@@ -9,8 +9,9 @@ import (
 )
 
 type UserHandler interface {
-	Get() echo.HandlerFunc
 	Root() echo.HandlerFunc
+	Get() echo.HandlerFunc
+	GetFriendList() echo.HandlerFunc
 }
 
 type userHandler struct {
@@ -53,4 +54,27 @@ func (uh *userHandler) Get() echo.HandlerFunc {
 	}
 }
 
+func (uh *userHandler) GetFriendList() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id, err := strconv.Atoi(c.Param("id"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
 
+		foundFriendList, err := uh.userUsecase.FindFriendsByID(id)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		res := make([]resUser, 0)
+		for _, v := range foundFriendList {
+			friend := resUser {
+				UserID: v.UserID,
+				Name:   v.Name,
+			}
+			res = append(res, friend)
+		}
+
+		return c.JSON(http.StatusOK, res)
+	}
+}
