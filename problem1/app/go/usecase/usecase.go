@@ -14,6 +14,7 @@ type UserUsecase interface {
 	FindFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error)
 	rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error)
 	rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User)
+	GetUniqueList(fList []*model.User) ([]*model.User)
 }
 
 type userUsecase struct {
@@ -157,4 +158,24 @@ func (uu *userUsecase) FindFriendOfFriendListExcept1HopFriend(fList []*model.Use
 	ffList = uu.rm1HopFriend(ffList, fList)
 
 	return ffList, nil
+}
+
+func (uu *userUsecase) GetUniqueList(fList []*model.User) ([]*model.User) {
+	nfList := make([]*model.User, 0)
+
+	for _, f := range fList {
+		isUnique := true
+
+		for _, nf := range nfList {
+			if f.UserID == nf.UserID {
+				isUnique = false
+			}
+		}
+
+		if isUnique {
+			nfList = append(nfList, f)
+		}
+	}
+
+	return nfList
 }

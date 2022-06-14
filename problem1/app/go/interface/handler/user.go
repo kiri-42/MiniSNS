@@ -77,6 +77,8 @@ func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
+		foundFriendList = uh.userUsecase.GetUniqueList(foundFriendList)
+
 		res := make([]resUser, 0)
 		for _, v := range foundFriendList {
 			friend := resUser {
