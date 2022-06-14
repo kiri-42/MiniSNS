@@ -102,7 +102,7 @@ func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		fList, err := uh.userUsecase.FindFriendsByID(id)
+		fList, err := uh.userUsecase.FindFriendListExceptBlock(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}

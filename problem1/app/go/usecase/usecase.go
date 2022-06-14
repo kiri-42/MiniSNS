@@ -75,7 +75,7 @@ func (uu *userUsecase) FindFriendsByID(id int) ([]*model.User, error) {
 func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
 	ffList := make([]*model.User, 0)
 	for _, f := range fList {
-		nfList, err := uu.FindFriendsByID(f.ID)
+		nfList, err := uu.FindFriendListExceptBlock(f.ID)
 		if err != nil {
 			return nil, err
 		}
