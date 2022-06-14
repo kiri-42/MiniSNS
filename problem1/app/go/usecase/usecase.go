@@ -86,14 +86,24 @@ func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.Use
 }
 
 func (uu *userUsecase) FindFriendListExceptBlock(id int) ([]*model.User, error) {
+	println("friend")
+
 	fList, err := uu.FindFriendsByID(id)
 	if err != nil {
 		return nil, err
 	}
 
+	for _, v := range fList {
+		println("Friend", v.ID, v.UserID, v.Name)
+	}
+
 	bList, err := uu.userRepo.FindBlockList(id)
 	if err != nil {
 		return nil, err
+	}
+
+	for _, v := range bList {
+		println("Block", v.ID, v.User1ID, v.User2ID)
 	}
 
 	return uu.rmBlockUser(fList, bList, id)
@@ -102,6 +112,7 @@ func (uu *userUsecase) FindFriendListExceptBlock(id int) ([]*model.User, error) 
 func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
 	nList := make([]*model.User, 0)
 	len := len(bList)
+	println("bList len: ", len)
 
 	userID, err := uu.userRepo.FindUserIDByID(id)
 	if err != nil {
@@ -109,15 +120,17 @@ func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id 
 	}
 
 	for _, f := range fList {
-		for i, b := range bList {
+		isBlock := false
+		
+		for _, b := range bList {
 			if b.User1ID == f.UserID && b.User2ID == userID || b.User1ID == userID && b.User2ID == f.UserID {
-				//breakにするべきかも
-				continue
+				isBlock = true
+				break
 			}
+		}
 
-			if i == len - 1 {
-				nList = append(nList, f)
-			}
+		if !isBlock {
+			nList = append(nList, f)
 		}
 	}
 
