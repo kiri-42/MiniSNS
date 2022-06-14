@@ -62,25 +62,25 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 
 func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userID, err := strconv.Atoi(c.Param("user_id"))
+		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		id, err := uh.userUsecase.FindIDByUserID(userID)
+		id, err := uh.userUsecase.FindIDByUserID(uID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		foundFriendList, err := uh.userUsecase.FindFriendListExceptBlock(id)
+		fList, err := uh.userUsecase.FindFriendListExceptBlock(id)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		foundFriendList = uh.userUsecase.GetUniqueList(foundFriendList)
+		fList = uh.userUsecase.GetUniqueList(fList)
 
 		res := make([]resUser, 0)
-		for _, v := range foundFriendList {
+		for _, v := range fList {
 			friend := resUser {
 				UserID: v.UserID,
 				Name:   v.Name,
