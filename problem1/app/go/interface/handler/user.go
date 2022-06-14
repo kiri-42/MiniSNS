@@ -33,14 +33,11 @@ func (uh *userHandler) Root() echo.HandlerFunc  {
 }
 
 func (uh *userHandler) Get() echo.HandlerFunc {
-	println("start0")
 	return func(c echo.Context) error {
-		println("start")
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
-		println("get id", id)
 
 		foundUser, err := uh.userUsecase.FindByID(id)
 		if err != nil {

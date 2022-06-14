@@ -2,10 +2,12 @@ package main
 
 import (
 	"problem1/configs"
-	"problem1/interface/handler"
 	"problem1/infrastructure"
+	"problem1/interface/handler"
 	"problem1/usecase"
 	"strconv"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,6 +18,7 @@ func main() {
 	db, err := configs.GetDB()
 	if err != nil {
 		println(err.Error())
+		return
 	}
 	defer db.Close()
 

@@ -15,20 +15,15 @@ func NewUserRepository(db *sql.DB) repository.UserRepository {
 	return &UserRepository{DB: db}
 }
 
-// // 未実装
-// func (ur *UserRepository) Create(user *model.User) error {
-// 	return nil
-// }
-
 func (ur *UserRepository) FindByID(id int) (*model.User, error) {
-	rows, err := ur.DB.Query(`SELECT * FROM users WHERE user_id = ?`, id)
+	rows, err := ur.DB.Query(`SELECT * FROM users WHERE id = ?`, id)
 	if err != nil {
 		return nil, err
 	}
 
 	rows.Next()
 	user := new(model.User)
-	err = rows.Scan(user.ID, user.UserID, user.Name)
+	err = rows.Scan(&(user.ID), &(user.UserID), &(user.Name))
 	if err != nil {
 		return nil, err
 	}
@@ -36,9 +31,7 @@ func (ur *UserRepository) FindByID(id int) (*model.User, error) {
 	return user, nil
 }
 
-// func (ur *UserRepository) Delete(user *model.User) error {
-// 	return nil
-// }
+
 
 
 
