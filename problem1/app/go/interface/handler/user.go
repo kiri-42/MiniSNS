@@ -51,12 +51,7 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		res := resUser {
-			UserID: u.UserID,
-			Name:   u.Name,
-		}
-
-		return c.JSON(http.StatusOK, res)
+		return c.JSON(http.StatusOK, getResUser(u))
 	}
 }
 
