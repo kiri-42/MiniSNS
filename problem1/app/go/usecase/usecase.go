@@ -8,6 +8,7 @@ import (
 type UserUsecase interface {
 	GetUser(uID int) (*model.User, error)
 	GetFriendList(uID int) ([]*model.User, error)
+	GetFriendOfFriendList(uID int) ([]*model.User, error)
 	FindByID(id int) (*model.User, error)
 	FindIDByUserID(userID int) (int, error)
 	FindFriendList(id int) ([]*model.User, error)
@@ -53,6 +54,25 @@ func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 	}
 
 	return uu.GetUniqueList(fList), nil
+}
+
+func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
+	id, err := uu.FindIDByUserID(uID)
+	if err != nil {
+		return nil, err
+	}
+
+	fList, err := uu.FindFriendListExceptBlock(id)
+	if err != nil {
+		return nil, err
+	}
+
+	ffList, err := uu.FindFriendOfFriendListExcept1HopFriend(fList)
+	if err != nil {
+		return nil, err
+	}
+
+	return uu.GetUniqueList(ffList), nil
 }
 
 func (uu *userUsecase) FindByID(id int) (*model.User, error) {
