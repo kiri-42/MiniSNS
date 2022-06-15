@@ -33,6 +33,23 @@ func (ur *UserRepository) FindUser(id int) (*model.User, error) {
 	return u, nil
 }
 
+// FindUserList はUser listをidで取得します。
+func (ur *UserRepository) FindUserList() ([]*model.User, error) {
+	rows, err := ur.DB.Query(`SELECT * FROM users`)
+	if err != nil {
+		return nil, err
+	}
+
+	uList := make([]*model.User, 0)
+	for rows.Next() {
+		var u model.User
+		rows.Scan(&u.ID, &u.UserID, &u.Name)
+		uList = append(uList, &u)
+	}
+
+	return uList, nil
+}
+
 // FindUserID はuser_idをidで取得します。
 func (ur *UserRepository) FindUserID(id int) (int, error) {
 	row, err := ur.DB.Query(`SELECT user_id FROM users WHERE id = ?`, id)

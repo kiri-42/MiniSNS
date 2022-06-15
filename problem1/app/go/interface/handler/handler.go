@@ -11,6 +11,7 @@ import (
 type UserHandler interface {
 	Root() echo.HandlerFunc
 	GetUser() echo.HandlerFunc
+	GetUserList() echo.HandlerFunc
 	GetFriendList() echo.HandlerFunc
 	GetFriendOfFriendList() echo.HandlerFunc
 	GetFriendOfFriendListPaging() echo.HandlerFunc
@@ -53,6 +54,19 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, getResUser(u))
+	}
+}
+
+// GetUserList は"/get_user_list"のhttpハンドラです。
+// User listをjson形式で返します。
+func (uh *userHandler) GetUserList() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		uList, err := uh.userUsecase.GetUserList()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.JSON(http.StatusOK, getResUserList(uList))
 	}
 }
 

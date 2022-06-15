@@ -7,6 +7,7 @@ import (
 
 type UserUsecase interface {
 	GetUser(uID int) (*model.User, error)
+	GetUserList() ([]*model.User, error)
 	GetFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error)
@@ -34,6 +35,16 @@ func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 	}
 
 	return u, nil
+}
+
+// GetUserList はUser listを取得します。
+func (uu *userUsecase) GetUserList() ([]*model.User, error) {
+	uList, err := uu.userRepo.FindUserList()
+	if err != nil {
+		return nil, err
+	}
+
+	return uList, nil
 }
 
 // GetFriendList はfriend listをuser_idで取得します。
