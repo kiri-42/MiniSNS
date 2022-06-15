@@ -11,10 +11,12 @@ type UserRepository struct {
 	DB *sql.DB
 }
 
+// NewUserRepository はUserRepositoryのコンストラクタです。
 func NewUserRepository(db *sql.DB) repository.UserRepository {
 	return &UserRepository{DB: db}
 }
 
+// FindUser はUserをidで取得します。
 func (ur *UserRepository) FindUser(id int) (*model.User, error) {
 	row, err := ur.DB.Query(`SELECT * FROM users WHERE id = ?`, id)
 	if err != nil {
@@ -31,6 +33,7 @@ func (ur *UserRepository) FindUser(id int) (*model.User, error) {
 	return u, nil
 }
 
+// FindUserID はuser_idをidで取得します。
 func (ur *UserRepository) FindUserID(id int) (int, error) {
 	row, err := ur.DB.Query(`SELECT user_id FROM users WHERE id = ?`, id)
 	if err != nil {
@@ -47,6 +50,7 @@ func (ur *UserRepository) FindUserID(id int) (int, error) {
 	return userID, nil
 }
 
+// FindID はidをuser_idで取得します。
 func (ur *UserRepository) FindID(uID int) (int, error) {
 	row, err := ur.DB.Query(`SELECT id FROM users WHERE user_id = ?`, uID)
 	if err != nil {
@@ -63,6 +67,7 @@ func (ur *UserRepository) FindID(uID int) (int, error) {
 	return id, nil
 }
 
+// FindFriendLinkList はfriend link listをidで取得します。
 func (ur *UserRepository) FindFriendLinkList(id int) ([]*model.Link, error) {
 	uID, err := ur.FindUserID(id)
 	if err != nil {
@@ -84,6 +89,7 @@ func (ur *UserRepository) FindFriendLinkList(id int) ([]*model.Link, error) {
 	return fl, nil
 }
 
+// FindBlockList はblock listをidで取得します。
 func (ur *UserRepository) FindBlockList(id int) ([]*model.Link, error) {
 	uID, err := ur.FindUserID(id)
 	if err != nil {
