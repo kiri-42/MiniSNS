@@ -5,12 +5,12 @@ import (
 )
 
 func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
-	foundFriends, err := uu.userRepo.FindFriendsByID(id)
+	foundFriends, err := uu.userRepo.FindFriendLinkList(id)
 	if err != nil {
 		return nil, err
 	}
 
-	userID, err := uu.userRepo.FindUserIDByID(id)
+	userID, err := uu.userRepo.FindUserID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (uu *userUsecase) findFriendListExceptBlock(id int) ([]*model.User, error) 
 func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
 	nList := make([]*model.User, 0)
 
-	userID, err := uu.userRepo.FindUserIDByID(id)
+	userID, err := uu.userRepo.FindUserID(id)
 	if err != nil {
 		return nil, err
 	}

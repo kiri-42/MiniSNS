@@ -21,7 +21,7 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 }
 
 func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
-	id, err := uu.userRepo.FindIDByUserID(uID)
+	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 }
 
 func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
-	id, err := uu.userRepo.FindIDByUserID(uID)
+	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 }
 
 func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
-	id, err := uu.userRepo.FindIDByUserID(uID)
+	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
 		return nil, err
 	}

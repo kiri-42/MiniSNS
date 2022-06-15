@@ -6,8 +6,8 @@ import (
 
 type UserRepository interface {
 	FindUser(id int) (*model.User, error)
-	FindUserIDByID(id int) (int, error)
-	FindIDByUserID(userID int) (int, error)
-	FindFriendsByID(id int) ([]*model.Link, error)
+	FindUserID(id int) (int, error)
+	FindID(userID int) (int, error)
+	FindFriendLinkList(id int) ([]*model.Link, error)
 	FindBlockList(id int) ([]*model.Link, error)
 }

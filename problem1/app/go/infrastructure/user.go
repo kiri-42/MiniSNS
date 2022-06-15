@@ -31,7 +31,7 @@ func (ur *UserRepository) FindUser(id int) (*model.User, error) {
 	return user, nil
 }
 
-func (ur *UserRepository) FindUserIDByID(id int) (int, error) {
+func (ur *UserRepository) FindUserID(id int) (int, error) {
 	row, err := ur.DB.Query(`SELECT user_id FROM users WHERE id = ?`, id)
 	if err != nil {
 		return 0, err
@@ -47,7 +47,7 @@ func (ur *UserRepository) FindUserIDByID(id int) (int, error) {
 	return userID, nil
 }
 
-func (ur *UserRepository) FindIDByUserID(userID int) (int, error) {
+func (ur *UserRepository) FindID(userID int) (int, error) {
 	row, err := ur.DB.Query(`SELECT id FROM users WHERE user_id = ?`, userID)
 	if err != nil {
 		return 0, err
@@ -63,8 +63,8 @@ func (ur *UserRepository) FindIDByUserID(userID int) (int, error) {
 	return id, nil
 }
 
-func (ur *UserRepository) FindFriendsByID(id int) ([]*model.Link, error) {
-	userID, err := ur.FindUserIDByID(id)
+func (ur *UserRepository) FindFriendLinkList(id int) ([]*model.Link, error) {
+	userID, err := ur.FindUserID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (ur *UserRepository) FindFriendsByID(id int) ([]*model.Link, error) {
 }
 
 func (ur *UserRepository) FindBlockList(id int) ([]*model.Link, error) {
-	userID, err := ur.FindUserIDByID(id)
+	userID, err := ur.FindUserID(id)
 	if err != nil {
 		return nil, err
 	}
