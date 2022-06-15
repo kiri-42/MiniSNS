@@ -12,6 +12,7 @@ type UserHandler interface {
 	Root() echo.HandlerFunc
 	GetUser() echo.HandlerFunc
 	GetUserList() echo.HandlerFunc
+	GetUserListPaging() echo.HandlerFunc
 	GetFriendList() echo.HandlerFunc
 	GetFriendOfFriendList() echo.HandlerFunc
 	GetFriendOfFriendListPaging() echo.HandlerFunc
@@ -62,6 +63,29 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 func (uh *userHandler) GetUserList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uList, err := uh.userUsecase.GetUserList()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.JSON(http.StatusOK, getResUserList(uList))
+	}
+}
+
+// GetUserListPaging は"/get_user_list_page"のhttpハンドラです。
+// limitとpageをもとにUser listをjson形式で返します。
+func (uh *userHandler) GetUserListPaging() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		limit, err := strconv.Atoi(c.Param("limit"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		page, err := strconv.Atoi(c.Param("page"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		uList, err := uh.userUsecase.GetUserListPaging(limit, page)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}

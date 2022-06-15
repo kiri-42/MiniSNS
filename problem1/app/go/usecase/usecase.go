@@ -8,6 +8,7 @@ import (
 type UserUsecase interface {
 	GetUser(uID int) (*model.User, error)
 	GetUserList() ([]*model.User, error)
+	GetUserListPaging(limit, page int) ([]*model.User, error)
 	GetFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error)
@@ -45,6 +46,27 @@ func (uu *userUsecase) GetUserList() ([]*model.User, error) {
 	}
 
 	return uList, nil
+}
+
+// GetUserListPaging はpaging形式のUser listを取得します。
+func (uu *userUsecase) GetUserListPaging(limit, page int) ([]*model.User, error) {
+	uList, err := uu.userRepo.FindUserList()
+	if err != nil {
+		return nil, err
+	}
+
+	end := limit * page
+	start := end - (limit - 1)
+	nuList := make([]*model.User, 0)
+	for i, u := range uList {
+		var nu model.User
+		if start <= i+1 && i+1 <= end {
+			nu.UserID, nu.Name = u.UserID, u.Name
+			nuList = append(nuList, &nu)
+		}
+	}
+
+	return nuList, nil
 }
 
 // GetFriendList はfriend listをuser_idで取得します。
