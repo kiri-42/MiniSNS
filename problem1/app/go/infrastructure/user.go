@@ -47,8 +47,8 @@ func (ur *UserRepository) FindUserID(id int) (int, error) {
 	return userID, nil
 }
 
-func (ur *UserRepository) FindID(userID int) (int, error) {
-	row, err := ur.DB.Query(`SELECT id FROM users WHERE user_id = ?`, userID)
+func (ur *UserRepository) FindID(uID int) (int, error) {
+	row, err := ur.DB.Query(`SELECT id FROM users WHERE user_id = ?`, uID)
 	if err != nil {
 		return 0, err
 	}
