@@ -16,19 +16,19 @@ func NewUserRepository(db *sql.DB) repository.UserRepository {
 }
 
 func (ur *UserRepository) FindUser(id int) (*model.User, error) {
-	rows, err := ur.DB.Query(`SELECT * FROM users WHERE id = ?`, id)
+	row, err := ur.DB.Query(`SELECT * FROM users WHERE id = ?`, id)
 	if err != nil {
 		return nil, err
 	}
 
-	rows.Next()
-	user := new(model.User)
-	err = rows.Scan(&(user.ID), &(user.UserID), &(user.Name))
+	row.Next()
+	u := new(model.User)
+	err = row.Scan(&(u.ID), &(u.UserID), &(u.Name))
 	if err != nil {
 		return nil, err
 	}
 
-	return user, nil
+	return u, nil
 }
 
 func (ur *UserRepository) FindUserID(id int) (int, error) {
@@ -74,14 +74,14 @@ func (ur *UserRepository) FindFriendLinkList(id int) ([]*model.Link, error) {
 		return nil, err
 	}
 
-	friends := make([]*model.Link, 0)
+	fl := make([]*model.Link, 0)
 	for rows.Next() {
-		var friend model.Link
-		rows.Scan(&friend.ID, &friend.User1ID, &friend.User2ID)
-		friends = append(friends, &friend)
+		var f model.Link
+		rows.Scan(&f.ID, &f.User1ID, &f.User2ID)
+		fl = append(fl, &f)
 	}
 
-	return friends, nil
+	return fl, nil
 }
 
 func (ur *UserRepository) FindBlockList(id int) ([]*model.Link, error) {
