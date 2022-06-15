@@ -20,6 +20,7 @@ type userHandler struct {
 	userUsecase usecase.UserUsecase
 }
 
+// NewUserHandler はuserHandlerのコンストラクタです。
 func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return &userHandler{userUsecase: userUsecase}
 }
@@ -29,12 +30,16 @@ type resUser struct {
 	Name   string  `json:"name"`
 }
 
+// Root は"/"のhttpハンドラです。
+// "mini sns"を返します
 func (uh *userHandler) Root() echo.HandlerFunc  {
 	return func(c echo.Context) error {
 		return c.String(http.StatusOK, "mini sns")
 	}
 }
 
+// GetUser は"/get_user/:user_id"のhttpハンドラです。
+// user_idをもとにUserをjson形式で返します。
 func (uh *userHandler) GetUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
@@ -51,6 +56,8 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 	}
 }
 
+// GetFriendList は"/get_friend_list/:user_id"のhttpハンドラです。
+// user_idをもとにfriend listをjson形式で返します。
 func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
@@ -67,6 +74,8 @@ func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 	}
 }
 
+// GetFriendOfFriendList は"/get_friend_of_friend_list/:user_id"のhttpハンドラです。
+// user_idをもとにfriendのfriend listをjson形式で返します。
 func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
@@ -83,6 +92,8 @@ func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
 	}
 }
 
+// GetFriendOfFriendListPaging は"/get_friend_of_friend_list_paging/:user_id"のhttpハンドラです。
+// user_idとlimit,pageをもとにfriendのfriend listをjson形式で返します。
 func (uh *userHandler) GetFriendOfFriendListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
