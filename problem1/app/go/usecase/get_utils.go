@@ -57,7 +57,7 @@ func (uu *userUsecase) getFriendOfFriendList(fList []*model.User) ([]*model.User
 		ffList = append(ffList, nfList...)
 	}
 
-	return ffList, nil
+	return uu.rm1HopFriend(ffList, fList), nil
 }
 
 func (uu *userUsecase) getUniqueList(fList []*model.User) ([]*model.User) {
