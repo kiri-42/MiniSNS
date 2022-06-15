@@ -16,10 +16,12 @@ type userUsecase struct {
 	userRepo repository.UserRepository
 }
 
+// NewUserUsecase はuserUsecaseのコンストラクタです。
 func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	return &userUsecase{userRepo: userRepo}
 }
 
+// GetUser はUserをuser_idで取得します。
 func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
@@ -34,6 +36,7 @@ func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 	return u, nil
 }
 
+// GetFriendList はfriend listをuser_idで取得します。
 func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
@@ -53,6 +56,7 @@ func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 	return uu.getUniqueList(fList), nil
 }
 
+// GetFriendOfFriendList はfriendのfriend listをuser_idで取得します。
 func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
 	fList, err := uu.GetFriendList(uID)
 	if err != nil {
@@ -67,6 +71,7 @@ func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
 	return uu.getUniqueList(ffList), nil
 }
 
+// GetFriendOfFriendListPaging はpaging形式のfriendのfriend listをuser_idで取得します。
 func (uu *userUsecase) GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error) {
 	ffList, err := uu.GetFriendOfFriendList(uID)
 	if err != nil {
