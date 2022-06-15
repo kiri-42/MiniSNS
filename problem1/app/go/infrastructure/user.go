@@ -64,12 +64,12 @@ func (ur *UserRepository) FindID(userID int) (int, error) {
 }
 
 func (ur *UserRepository) FindFriendLinkList(id int) ([]*model.Link, error) {
-	userID, err := ur.FindUserID(id)
+	uID, err := ur.FindUserID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := ur.DB.Query(`SELECT * FROM friend_link WHERE user1_id = ? || user2_id = ?`, userID, userID)
+	rows, err := ur.DB.Query(`SELECT * FROM friend_link WHERE user1_id = ? || user2_id = ?`, uID, uID)
 	if err != nil {
 		return nil, err
 	}
@@ -85,12 +85,12 @@ func (ur *UserRepository) FindFriendLinkList(id int) ([]*model.Link, error) {
 }
 
 func (ur *UserRepository) FindBlockList(id int) ([]*model.Link, error) {
-	userID, err := ur.FindUserID(id)
+	uID, err := ur.FindUserID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := ur.DB.Query(`SELECT * FROM block_list WHERE user1_id = ? || user2_id = ?`, userID, userID)
+	rows, err := ur.DB.Query(`SELECT * FROM block_list WHERE user1_id = ? || user2_id = ?`, uID, uID)
 	if err != nil {
 		return nil, err
 	}
