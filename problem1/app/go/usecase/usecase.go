@@ -40,7 +40,12 @@ func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 		return nil, err
 	}
 
-	fList, err := uu.findFriendListExceptBlock(id)
+	fList, err := uu.getFriendList(id)
+	if err != nil {
+		return nil, err
+	}
+
+	fList, err = uu.getFriendListExceptBlock(id, fList)
 	if err != nil {
 		return nil, err
 	}
@@ -49,17 +54,12 @@ func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 }
 
 func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
-	id, err := uu.userRepo.FindID(uID)
+	fList, err := uu.GetFriendList(uID)
 	if err != nil {
 		return nil, err
 	}
 
-	fList, err := uu.findFriendListExceptBlock(id)
-	if err != nil {
-		return nil, err
-	}
-
-	ffList, err := uu.findFriendOfFriendListExcept1HopFriend(fList)
+	ffList, err := uu.getFriendOfFriendListExcept1HopFriend(fList)
 	if err != nil {
 		return nil, err
 	}

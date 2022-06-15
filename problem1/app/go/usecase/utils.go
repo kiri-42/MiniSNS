@@ -4,7 +4,7 @@ import (
 	"problem1/domain/model"
 )
 
-func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
+func (uu *userUsecase) getFriendList(id int) ([]*model.User, error) {
 	flList, err := uu.userRepo.FindFriendLinkList(id)
 	if err != nil {
 		return nil, err
@@ -36,31 +36,59 @@ func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
 	return uList, nil
 }
 
-func (uu *userUsecase) findFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
-	ffList := make([]*model.User, 0)
-	for _, f := range fList {
-		nfList, err := uu.findFriendListExceptBlock(f.ID)
-		if err != nil {
-			return nil, err
-		}
-		ffList = append(ffList, nfList...)
-	}
-
-	return ffList, nil
-}
-
-func (uu *userUsecase) findFriendListExceptBlock(id int) ([]*model.User, error) {
-	fList, err := uu.findFriendList(id)
-	if err != nil {
-		return nil, err
-	}
-
+func (uu *userUsecase) getFriendListExceptBlock(id int, fList []*model.User) ([]*model.User, error) {
 	bList, err := uu.userRepo.FindBlockList(id)
 	if err != nil {
 		return nil, err
 	}
 
 	return uu.rmBlockUser(fList, bList, id)
+}
+
+func (uu *userUsecase) getFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
+	ffList := make([]*model.User, 0)
+
+	for _, f := range fList {
+		nfList, err := uu.GetFriendList(f.UserID)
+		if err != nil {
+			return nil, err
+		}
+
+		ffList = append(ffList, nfList...)
+	}
+
+	return ffList, nil
+}
+
+func (uu *userUsecase) getFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error) {
+	ffList, err := uu.getFriendOfFriendList(fList)
+	if err != nil {
+		return nil, err
+	}
+
+	ffList = uu.rm1HopFriend(ffList, fList)
+
+	return ffList, nil
+}
+
+func (uu *userUsecase) getUniqueList(fList []*model.User) ([]*model.User) {
+	nfList := make([]*model.User, 0)
+
+	for _, f := range fList {
+		isUnique := true
+
+		for _, nf := range nfList {
+			if f.UserID == nf.UserID {
+				isUnique = false
+			}
+		}
+
+		if isUnique {
+			nfList = append(nfList, f)
+		}
+	}
+
+	return nfList
 }
 
 func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
@@ -108,35 +136,4 @@ func (uu *userUsecase) rm1HopFriend(ffList []*model.User, fList []*model.User) (
 	}
 
 	return nffList
-}
-
-func (uu *userUsecase) findFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error) {
-	ffList, err := uu.findFriendOfFriendList(fList)
-	if err != nil {
-		return nil, err
-	}
-
-	ffList = uu.rm1HopFriend(ffList, fList)
-
-	return ffList, nil
-}
-
-func (uu *userUsecase) getUniqueList(fList []*model.User) ([]*model.User) {
-	nfList := make([]*model.User, 0)
-
-	for _, f := range fList {
-		isUnique := true
-
-		for _, nf := range nfList {
-			if f.UserID == nf.UserID {
-				isUnique = false
-			}
-		}
-
-		if isUnique {
-			nfList = append(nfList, f)
-		}
-	}
-
-	return nfList
 }
