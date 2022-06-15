@@ -2,7 +2,7 @@ package handler
 
 import "github.com/labstack/echo/v4"
 
-func Routing(e *echo.Echo, userHandler UserHandler) {
+func Routing(e *echo.Echo, userHandler UserHandlerI) {
 	e.GET("/", userHandler.Root())
 	e.GET("/get_user/:user_id", userHandler.GetUser())
 	e.GET("/get_user_list", userHandler.GetUserList())

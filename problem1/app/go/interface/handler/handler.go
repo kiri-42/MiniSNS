@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type UserHandler interface {
+type UserHandlerI interface {
 	Root() echo.HandlerFunc
 	GetUser() echo.HandlerFunc
 	GetUserList() echo.HandlerFunc
@@ -18,13 +18,13 @@ type UserHandler interface {
 	GetFriendOfFriendListPaging() echo.HandlerFunc
 }
 
-type userHandler struct {
-	userUsecase usecase.UserUsecase
+type userHandlerS struct {
+	userUsecase usecase.UserUsecaseI
 }
 
 // NewUserHandler はuserHandlerのコンストラクタです。
-func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
-	return &userHandler{userUsecase: userUsecase}
+func NewUserHandler(userUsecase usecase.UserUsecaseI) UserHandlerI {
+	return &userHandlerS{userUsecase: userUsecase}
 }
 
 type resUser struct {
@@ -34,7 +34,7 @@ type resUser struct {
 
 // Root は"/"のhttpハンドラです。
 // "mini sns"を返します
-func (uh *userHandler) Root() echo.HandlerFunc  {
+func (uh *userHandlerS) Root() echo.HandlerFunc  {
 	return func(c echo.Context) error {
 		return c.String(http.StatusOK, "mini sns")
 	}
@@ -42,7 +42,7 @@ func (uh *userHandler) Root() echo.HandlerFunc  {
 
 // GetUser は"/get_user/:user_id"のhttpハンドラです。
 // user_idをもとにUserをjson形式で返します。
-func (uh *userHandler) GetUser() echo.HandlerFunc {
+func (uh *userHandlerS) GetUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
@@ -60,7 +60,7 @@ func (uh *userHandler) GetUser() echo.HandlerFunc {
 
 // GetUserList は"/get_user_list"のhttpハンドラです。
 // User listをjson形式で返します。
-func (uh *userHandler) GetUserList() echo.HandlerFunc {
+func (uh *userHandlerS) GetUserList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uList, err := uh.userUsecase.GetUserList()
 		if err != nil {
@@ -73,7 +73,7 @@ func (uh *userHandler) GetUserList() echo.HandlerFunc {
 
 // GetUserListPaging は"/get_user_list_page"のhttpハンドラです。
 // limitとpageをもとにUser listをjson形式で返します。
-func (uh *userHandler) GetUserListPaging() echo.HandlerFunc {
+func (uh *userHandlerS) GetUserListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		limit, err := strconv.Atoi(c.Param("limit"))
 		if err != nil {
@@ -96,7 +96,7 @@ func (uh *userHandler) GetUserListPaging() echo.HandlerFunc {
 
 // GetFriendList は"/get_friend_list/:user_id"のhttpハンドラです。
 // user_idをもとにfriend listをjson形式で返します。
-func (uh *userHandler) GetFriendList() echo.HandlerFunc {
+func (uh *userHandlerS) GetFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
@@ -114,7 +114,7 @@ func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 
 // GetFriendOfFriendList は"/get_friend_of_friend_list/:user_id"のhttpハンドラです。
 // user_idをもとにfriendのfriend listをjson形式で返します。
-func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
+func (uh *userHandlerS) GetFriendOfFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
@@ -132,7 +132,7 @@ func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
 
 // GetFriendOfFriendListPaging は"/get_friend_of_friend_list_paging/:user_id"のhttpハンドラです。
 // user_idとlimit,pageをもとにfriendのfriend listをjson形式で返します。
-func (uh *userHandler) GetFriendOfFriendListPaging() echo.HandlerFunc {
+func (uh *userHandlerS) GetFriendOfFriendListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {

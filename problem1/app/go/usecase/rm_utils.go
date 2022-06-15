@@ -4,7 +4,7 @@ import (
 	"problem1/domain/model"
 )
 
-func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
+func (uu *userUsecaseS) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
 	nuList := make([]*model.User, 0)
 
 	userID, err := uu.userRepo.FindUserID(id)
@@ -30,7 +30,7 @@ func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id 
 	return nuList, nil
 }
 
-func (uu *userUsecase) rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User) {
+func (uu *userUsecaseS) rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User) {
 	nffList := make([]*model.User, 0)
 
 	for _, ff := range ffList {

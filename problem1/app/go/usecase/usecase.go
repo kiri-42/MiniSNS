@@ -5,7 +5,7 @@ import (
 	"problem1/domain/repository"
 )
 
-type UserUsecase interface {
+type UserUsecaseI interface {
 	GetUser(uID int) (*model.User, error)
 	GetUserList() ([]*model.User, error)
 	GetUserListPaging(limit, page int) ([]*model.User, error)
@@ -14,17 +14,17 @@ type UserUsecase interface {
 	GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error)
 }
 
-type userUsecase struct {
-	userRepo repository.UserRepository
+type userUsecaseS struct {
+	userRepo repository.UserRepositoryI
 }
 
 // NewUserUsecase はuserUsecaseのコンストラクタです。
-func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
-	return &userUsecase{userRepo: userRepo}
+func NewUserUsecase(userRepo repository.UserRepositoryI) UserUsecaseI {
+	return &userUsecaseS{userRepo: userRepo}
 }
 
 // GetUser はUserをuser_idで取得します。
-func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
+func (uu *userUsecaseS) GetUser(uID int) (*model.User, error) {
 	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 }
 
 // GetUserList はUser listを取得します。
-func (uu *userUsecase) GetUserList() ([]*model.User, error) {
+func (uu *userUsecaseS) GetUserList() ([]*model.User, error) {
 	uList, err := uu.userRepo.FindUserList()
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (uu *userUsecase) GetUserList() ([]*model.User, error) {
 }
 
 // GetUserListPaging はpaging形式のUser listを取得します。
-func (uu *userUsecase) GetUserListPaging(limit, page int) ([]*model.User, error) {
+func (uu *userUsecaseS) GetUserListPaging(limit, page int) ([]*model.User, error) {
 	uList, err := uu.userRepo.FindUserList()
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (uu *userUsecase) GetUserListPaging(limit, page int) ([]*model.User, error)
 }
 
 // GetFriendList はfriend listをuser_idで取得します。
-func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
+func (uu *userUsecaseS) GetFriendList(uID int) ([]*model.User, error) {
 	id, err := uu.userRepo.FindID(uID)
 	if err != nil {
 		return nil, err
@@ -90,7 +90,7 @@ func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
 }
 
 // GetFriendOfFriendList はfriendのfriend listをuser_idで取得します。
-func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
+func (uu *userUsecaseS)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
 	fList, err := uu.GetFriendList(uID)
 	if err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
 }
 
 // GetFriendOfFriendListPaging はpaging形式のfriendのfriend listをuser_idで取得します。
-func (uu *userUsecase) GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error) {
+func (uu *userUsecaseS) GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error) {
 	ffList, err := uu.GetFriendOfFriendList(uID)
 	if err != nil {
 		return nil, err

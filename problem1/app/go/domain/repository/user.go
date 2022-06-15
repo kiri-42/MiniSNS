@@ -4,7 +4,7 @@ import (
 	"problem1/domain/model"
 )
 
-type UserRepository interface {
+type UserRepositoryI interface {
 	FindID(userID int) (int, error)
 	FindUserID(id int) (int, error)
 	FindUser(id int) (*model.User, error)

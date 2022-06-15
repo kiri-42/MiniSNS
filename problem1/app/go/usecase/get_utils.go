@@ -4,7 +4,7 @@ import (
 	"problem1/domain/model"
 )
 
-func (uu *userUsecase) getFriendList(id int) ([]*model.User, error) {
+func (uu *userUsecaseS) getFriendList(id int) ([]*model.User, error) {
 	flList, err := uu.userRepo.FindFriendLinkList(id)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (uu *userUsecase) getFriendList(id int) ([]*model.User, error) {
 	return uList, nil
 }
 
-func (uu *userUsecase) getFriendListExceptBlock(id int, fList []*model.User) ([]*model.User, error) {
+func (uu *userUsecaseS) getFriendListExceptBlock(id int, fList []*model.User) ([]*model.User, error) {
 	bList, err := uu.userRepo.FindBlockList(id)
 	if err != nil {
 		return nil, err
@@ -45,7 +45,7 @@ func (uu *userUsecase) getFriendListExceptBlock(id int, fList []*model.User) ([]
 	return uu.rmBlockUser(fList, bList, id)
 }
 
-func (uu *userUsecase) getFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
+func (uu *userUsecaseS) getFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
 	ffList := make([]*model.User, 0)
 
 	for _, f := range fList {
@@ -60,7 +60,7 @@ func (uu *userUsecase) getFriendOfFriendList(fList []*model.User) ([]*model.User
 	return uu.rm1HopFriend(ffList, fList), nil
 }
 
-func (uu *userUsecase) getUniqueList(fList []*model.User) ([]*model.User) {
+func (uu *userUsecaseS) getUniqueList(fList []*model.User) ([]*model.User) {
 	nfList := make([]*model.User, 0)
 
 	for _, f := range fList {
