@@ -13,6 +13,7 @@ type UserHandler interface {
 	GetUser() echo.HandlerFunc
 	GetFriendList() echo.HandlerFunc
 	GetFriendOfFriendList() echo.HandlerFunc
+	GetFriendOfFriendListPaging() echo.HandlerFunc
 }
 
 type userHandler struct {
@@ -74,6 +75,32 @@ func (uh *userHandler) GetFriendOfFriendList() echo.HandlerFunc {
 		}
 
 		ffList, err := uh.userUsecase.GetFriendOfFriendList(uID)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.JSON(http.StatusOK, getResUserList(ffList))
+	}
+}
+
+func (uh *userHandler) GetFriendOfFriendListPaging() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		uID, err := strconv.Atoi(c.Param("user_id"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		limit, err := strconv.Atoi(c.Param("limit"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		page, err := strconv.Atoi(c.Param("page"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		ffList, err := uh.userUsecase.GetFriendOfFriendListPaging(uID, limit, page)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}

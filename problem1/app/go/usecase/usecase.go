@@ -9,6 +9,7 @@ type UserUsecase interface {
 	GetUser(uID int) (*model.User, error)
 	GetFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendList(uID int) ([]*model.User, error)
+	GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error)
 	FindByID(id int) (*model.User, error)
 	FindIDByUserID(userID int) (int, error)
 	FindFriendList(id int) ([]*model.User, error)
@@ -73,6 +74,26 @@ func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
 	}
 
 	return uu.GetUniqueList(ffList), nil
+}
+
+func (uu *userUsecase) GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error) {
+	ffList, err := uu.GetFriendOfFriendList(uID)
+	if err != nil {
+		return nil, err
+	}
+
+	end := limit * page
+	start := end - (limit - 1)
+	nffList := make([]*model.User, 0)
+	for i, ff := range ffList {
+		var u model.User
+		if start <= i+1 && i+1 <= end {
+			u.UserID, u.Name = ff.UserID, ff.Name
+			nffList = append(nffList, &u)
+		}
+	}
+
+	return nffList, nil
 }
 
 func (uu *userUsecase) FindByID(id int) (*model.User, error) {
