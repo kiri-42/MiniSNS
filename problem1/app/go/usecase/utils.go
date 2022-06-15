@@ -5,7 +5,7 @@ import (
 )
 
 func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
-	foundFriends, err := uu.userRepo.FindFriendLinkList(id)
+	flList, err := uu.userRepo.FindFriendLinkList(id)
 	if err != nil {
 		return nil, err
 	}
@@ -16,11 +16,11 @@ func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
 	}
 
 	idList := make([]int, 0)
-	for _, friend := range foundFriends {
-		if friend.User1ID != userID {
-			idList = append(idList, friend.User1ID)
+	for _, fl := range flList {
+		if fl.User1ID != userID {
+			idList = append(idList, fl.User1ID)
 		} else {
-			idList = append(idList, friend.User2ID)
+			idList = append(idList, fl.User2ID)
 		}
 	}
 
@@ -64,7 +64,7 @@ func (uu *userUsecase) findFriendListExceptBlock(id int) ([]*model.User, error) 
 }
 
 func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
-	nList := make([]*model.User, 0)
+	nuList := make([]*model.User, 0)
 
 	userID, err := uu.userRepo.FindUserID(id)
 	if err != nil {
@@ -82,11 +82,11 @@ func (uu *userUsecase) rmBlockUser(fList []*model.User, bList []*model.Link, id 
 		}
 
 		if !isBlock {
-			nList = append(nList, f)
+			nuList = append(nuList, f)
 		}
 	}
 
-	return nList, nil
+	return nuList, nil
 }
 
 func (uu *userUsecase) rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User) {
