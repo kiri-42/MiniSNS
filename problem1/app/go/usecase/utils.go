@@ -4,15 +4,6 @@ import (
 	"problem1/domain/model"
 )
 
-func (uu *userUsecase) findByID(id int) (*model.User, error) {
-	foundUser, err := uu.userRepo.FindByID(id)
-	if err != nil {
-		return nil, err
-	}
-
-	return foundUser, nil
-}
-
 func (uu *userUsecase) findIDByUserID(userID int) (int, error) {
 	id, err := uu.userRepo.FindIDByUserID(userID)
 	if err != nil {
