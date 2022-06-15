@@ -63,10 +63,12 @@ func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
 		return nil, err
 	}
 
-	ffList, err := uu.getFriendOfFriendListExcept1HopFriend(fList)
+	ffList, err := uu.getFriendOfFriendList(fList)
 	if err != nil {
 		return nil, err
 	}
+
+	ffList = uu.rm1HopFriend(ffList, fList)
 
 	return uu.getUniqueList(ffList), nil
 }

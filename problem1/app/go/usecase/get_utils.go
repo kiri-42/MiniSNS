@@ -60,17 +60,6 @@ func (uu *userUsecase) getFriendOfFriendList(fList []*model.User) ([]*model.User
 	return ffList, nil
 }
 
-func (uu *userUsecase) getFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error) {
-	ffList, err := uu.getFriendOfFriendList(fList)
-	if err != nil {
-		return nil, err
-	}
-
-	ffList = uu.rm1HopFriend(ffList, fList)
-
-	return ffList, nil
-}
-
 func (uu *userUsecase) getUniqueList(fList []*model.User) ([]*model.User) {
 	nfList := make([]*model.User, 0)
 
