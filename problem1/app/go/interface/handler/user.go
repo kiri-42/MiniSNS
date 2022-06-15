@@ -57,17 +57,10 @@ func (uh *userHandler) GetFriendList() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		id, err := uh.userUsecase.FindIDByUserID(uID)
+		fList, err := uh.userUsecase.GetFriendList(uID)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
 		}
-
-		fList, err := uh.userUsecase.FindFriendListExceptBlock(id)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
-		}
-
-		fList = uh.userUsecase.GetUniqueList(fList)
 
 		return c.JSON(http.StatusOK, getResUserList(fList))
 	}
