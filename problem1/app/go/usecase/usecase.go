@@ -10,15 +10,15 @@ type UserUsecase interface {
 	GetFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendList(uID int) ([]*model.User, error)
 	GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error)
-	FindByID(id int) (*model.User, error)
-	FindIDByUserID(userID int) (int, error)
-	FindFriendList(id int) ([]*model.User, error)
-	FindFriendOfFriendList(fList []*model.User) ([]*model.User, error)
-	FindFriendListExceptBlock(id int) ([]*model.User, error)
-	FindFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error)
+	findByID(id int) (*model.User, error)
+	findIDByUserID(userID int) (int, error)
+	findFriendList(id int) ([]*model.User, error)
+	findFriendOfFriendList(fList []*model.User) ([]*model.User, error)
+	findFriendListExceptBlock(id int) ([]*model.User, error)
+	findFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error)
 	rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error)
 	rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User)
-	GetUniqueList(fList []*model.User) ([]*model.User)
+	getUniqueList(fList []*model.User) ([]*model.User)
 }
 
 type userUsecase struct {
@@ -30,12 +30,12 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 }
 
 func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
-	id, err := uu.FindIDByUserID(uID)
+	id, err := uu.findIDByUserID(uID)
 	if err != nil {
 		return nil, err
 	}
 
-	u, err := uu.FindByID(id)
+	u, err := uu.findByID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -44,36 +44,36 @@ func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 }
 
 func (uu *userUsecase) GetFriendList(uID int) ([]*model.User, error) {
-	id, err := uu.FindIDByUserID(uID)
+	id, err := uu.findIDByUserID(uID)
 	if err != nil {
 		return nil, err
 	}
 
-	fList, err := uu.FindFriendListExceptBlock(id)
+	fList, err := uu.findFriendListExceptBlock(id)
 	if err != nil {
 		return nil, err
 	}
 
-	return uu.GetUniqueList(fList), nil
+	return uu.getUniqueList(fList), nil
 }
 
 func (uu *userUsecase)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
-	id, err := uu.FindIDByUserID(uID)
+	id, err := uu.findIDByUserID(uID)
 	if err != nil {
 		return nil, err
 	}
 
-	fList, err := uu.FindFriendListExceptBlock(id)
+	fList, err := uu.findFriendListExceptBlock(id)
 	if err != nil {
 		return nil, err
 	}
 
-	ffList, err := uu.FindFriendOfFriendListExcept1HopFriend(fList)
+	ffList, err := uu.findFriendOfFriendListExcept1HopFriend(fList)
 	if err != nil {
 		return nil, err
 	}
 
-	return uu.GetUniqueList(ffList), nil
+	return uu.getUniqueList(ffList), nil
 }
 
 func (uu *userUsecase) GetFriendOfFriendListPaging(uID, limit, page int) ([]*model.User, error) {
@@ -96,7 +96,7 @@ func (uu *userUsecase) GetFriendOfFriendListPaging(uID, limit, page int) ([]*mod
 	return nffList, nil
 }
 
-func (uu *userUsecase) FindByID(id int) (*model.User, error) {
+func (uu *userUsecase) findByID(id int) (*model.User, error) {
 	foundUser, err := uu.userRepo.FindByID(id)
 	if err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (uu *userUsecase) FindByID(id int) (*model.User, error) {
 	return foundUser, nil
 }
 
-func (uu *userUsecase) FindIDByUserID(userID int) (int, error) {
+func (uu *userUsecase) findIDByUserID(userID int) (int, error) {
 	id, err := uu.userRepo.FindIDByUserID(userID)
 	if err != nil {
 		return 0, err
@@ -114,7 +114,7 @@ func (uu *userUsecase) FindIDByUserID(userID int) (int, error) {
 	return id, nil
 }
 
-func (uu *userUsecase) FindFriendList(id int) ([]*model.User, error) {
+func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
 	foundFriends, err := uu.userRepo.FindFriendsByID(id)
 	if err != nil {
 		return nil, err
@@ -146,10 +146,10 @@ func (uu *userUsecase) FindFriendList(id int) ([]*model.User, error) {
 	return uList, nil
 }
 
-func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
+func (uu *userUsecase) findFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
 	ffList := make([]*model.User, 0)
 	for _, f := range fList {
-		nfList, err := uu.FindFriendListExceptBlock(f.ID)
+		nfList, err := uu.findFriendListExceptBlock(f.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -159,8 +159,8 @@ func (uu *userUsecase) FindFriendOfFriendList(fList []*model.User) ([]*model.Use
 	return ffList, nil
 }
 
-func (uu *userUsecase) FindFriendListExceptBlock(id int) ([]*model.User, error) {
-	fList, err := uu.FindFriendList(id)
+func (uu *userUsecase) findFriendListExceptBlock(id int) ([]*model.User, error) {
+	fList, err := uu.findFriendList(id)
 	if err != nil {
 		return nil, err
 	}
@@ -220,8 +220,8 @@ func (uu *userUsecase) rm1HopFriend(ffList []*model.User, fList []*model.User) (
 	return nffList
 }
 
-func (uu *userUsecase) FindFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error) {
-	ffList, err := uu.FindFriendOfFriendList(fList)
+func (uu *userUsecase) findFriendOfFriendListExcept1HopFriend(fList []*model.User) ([]*model.User, error) {
+	ffList, err := uu.findFriendOfFriendList(fList)
 	if err != nil {
 		return nil, err
 	}
@@ -231,7 +231,7 @@ func (uu *userUsecase) FindFriendOfFriendListExcept1HopFriend(fList []*model.Use
 	return ffList, nil
 }
 
-func (uu *userUsecase) GetUniqueList(fList []*model.User) ([]*model.User) {
+func (uu *userUsecase) getUniqueList(fList []*model.User) ([]*model.User) {
 	nfList := make([]*model.User, 0)
 
 	for _, f := range fList {
