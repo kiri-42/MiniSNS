@@ -15,7 +15,7 @@ func NewUserRepository(db *sql.DB) repository.UserRepository {
 	return &UserRepository{DB: db}
 }
 
-func (ur *UserRepository) FindByID(id int) (*model.User, error) {
+func (ur *UserRepository) FindUser(id int) (*model.User, error) {
 	rows, err := ur.DB.Query(`SELECT * FROM users WHERE id = ?`, id)
 	if err != nil {
 		return nil, err

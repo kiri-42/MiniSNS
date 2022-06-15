@@ -26,7 +26,7 @@ func (uu *userUsecase) GetUser(uID int) (*model.User, error) {
 		return nil, err
 	}
 
-	u, err := uu.userRepo.FindByID(id)
+	u, err := uu.userRepo.FindUser(id)
 	if err != nil {
 		return nil, err
 	}

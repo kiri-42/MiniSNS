@@ -26,7 +26,7 @@ func (uu *userUsecase) findFriendList(id int) ([]*model.User, error) {
 
 	uList := make([]*model.User, 0)
 	for _, id := range idList {
-		user, err := uu.userRepo.FindByID(id)
+		user, err := uu.userRepo.FindUser(id)
 		if err != nil {
 			return nil, err
 		}

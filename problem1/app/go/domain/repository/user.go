@@ -5,7 +5,7 @@ import (
 )
 
 type UserRepository interface {
-	FindByID(id int) (*model.User, error)
+	FindUser(id int) (*model.User, error)
 	FindUserIDByID(id int) (int, error)
 	FindIDByUserID(userID int) (int, error)
 	FindFriendsByID(id int) ([]*model.Link, error)
