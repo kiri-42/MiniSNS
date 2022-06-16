@@ -10,6 +10,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -27,6 +28,9 @@ func main() {
 	userHandler := handler.NewUserHandler(userUsecase)
 
 	e := echo.New()
+	e.Use(middleware.Recover())
+	e.Use(middleware.Logger())
+
 	handler.Routing(e, userHandler)
 	e.Logger.Fatal(e.Start(":" + strconv.Itoa(conf.Server.Port)))
 }
