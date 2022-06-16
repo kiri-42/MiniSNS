@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"problem1/configs"
 	"problem1/infrastructure"
 	"problem1/interface/handler"
@@ -18,7 +20,7 @@ func main() {
 
 	db, err := configs.GetDB()
 	if err != nil {
-		println(err.Error())
+		fmt.Fprintln(os.Stdout, err.Error())
 		return
 	}
 	defer db.Close()
