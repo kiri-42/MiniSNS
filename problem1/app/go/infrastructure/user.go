@@ -22,6 +22,7 @@ func (ur *UserRepositoryS) FindUser(id int) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer row.Close()
 
 	row.Next()
 	u := new(model.User)
@@ -39,6 +40,7 @@ func (ur *UserRepositoryS) FindUserList() ([]*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	uList := make([]*model.User, 0)
 	for rows.Next() {
@@ -56,6 +58,7 @@ func (ur *UserRepositoryS) FindUserID(id int) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer row.Close()
 
 	var userID int
 	row.Next()
@@ -73,6 +76,7 @@ func (ur *UserRepositoryS) FindID(uID int) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer row.Close()
 
 	var id int
 	row.Next()
@@ -95,6 +99,7 @@ func (ur *UserRepositoryS) FindFriendLinkList(id int) ([]*model.Link, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	fl := make([]*model.Link, 0)
 	for rows.Next() {
@@ -117,6 +122,7 @@ func (ur *UserRepositoryS) FindBlockList(id int) ([]*model.Link, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	bList := make([]*model.Link, 0)
 	for rows.Next() {
