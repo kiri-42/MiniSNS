@@ -30,8 +30,8 @@ func main() {
 	userHandler := handler.NewUserHandler(userUsecase)
 
 	e := echo.New()
-	e.Use(middleware.Recover())
-	e.Use(middleware.Logger())
+	e.Use(middleware.Recover()) // httpハンドラ内でpanicしてもサーバーが落ちないようにする
+	e.Use(middleware.Logger())  // httpリクエストのロクを出力
 
 	handler.Routing(e, userHandler)
 	e.Logger.Fatal(e.Start(":" + strconv.Itoa(conf.Server.Port)))
