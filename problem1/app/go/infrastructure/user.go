@@ -25,13 +25,13 @@ func (ur *UserRepositoryS) FindUser(id int) (*model.User, error) {
 	defer row.Close()
 
 	row.Next()
-	u := new(model.User)
-	err = row.Scan(&(u.ID), &(u.UserID), &(u.Name))
+	var u model.User
+	err = row.Scan(&u.ID, &u.UserID, &u.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	return u, nil
+	return &u, nil
 }
 
 // FindUserList はUser listをidで取得します。
