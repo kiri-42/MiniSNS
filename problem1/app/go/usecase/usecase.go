@@ -18,7 +18,7 @@ type userUsecaseS struct {
 	userRepo repository.UserRepositoryI
 }
 
-// NewUserUsecase はuserUsecaseのコンストラクタです。
+// NewUserUsecase はuserUsecaseSのコンストラクタです。
 func NewUserUsecase(userRepo repository.UserRepositoryI) UserUsecaseI {
 	return &userUsecaseS{userRepo: userRepo}
 }
@@ -55,18 +55,7 @@ func (uu *userUsecaseS) GetUserListPaging(limit, page int) ([]*model.User, error
 		return nil, err
 	}
 
-	end := limit * page
-	start := end - (limit - 1)
-	nuList := make([]*model.User, 0)
-	for i, u := range uList {
-		var nu model.User
-		if start <= i+1 && i+1 <= end {
-			nu.UserID, nu.Name = u.UserID, u.Name
-			nuList = append(nuList, &nu)
-		}
-	}
-
-	return nuList, nil
+	return uu.getPagingList(uList, limit, page), nil
 }
 
 // GetFriendList はfriend listをuser_idで取得します。
@@ -111,16 +100,5 @@ func (uu *userUsecaseS) GetFriendOfFriendListPaging(uID, limit, page int) ([]*mo
 		return nil, err
 	}
 
-	end := limit * page
-	start := end - (limit - 1)
-	nffList := make([]*model.User, 0)
-	for i, ff := range ffList {
-		var u model.User
-		if start <= i+1 && i+1 <= end {
-			u.UserID, u.Name = ff.UserID, ff.Name
-			nffList = append(nffList, &u)
-		}
-	}
-
-	return nffList, nil
+	return uu.getPagingList(ffList, limit, page), nil
 }

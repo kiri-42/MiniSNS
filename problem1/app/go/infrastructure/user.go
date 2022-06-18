@@ -11,7 +11,7 @@ type UserRepositoryS struct {
 	DB *sql.DB
 }
 
-// NewUserRepository はUserRepositoryのコンストラクタです。
+// NewUserRepository はUserRepositorySのコンストラクタです。
 func NewUserRepository(db *sql.DB) repository.UserRepositoryI {
 	return &UserRepositoryS{DB: db}
 }

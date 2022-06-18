@@ -6,7 +6,6 @@ import (
 
 func (uu *userUsecaseS) rmBlockUser(fList []*model.User, bList []*model.Link, id int) ([]*model.User, error) {
 	nuList := make([]*model.User, 0)
-
 	userID, err := uu.userRepo.FindUserID(id)
 	if err != nil {
 		return nil, err
@@ -14,7 +13,6 @@ func (uu *userUsecaseS) rmBlockUser(fList []*model.User, bList []*model.Link, id
 
 	for _, f := range fList {
 		isBlock := false
-
 		for _, b := range bList {
 			if b.User1ID == f.UserID && b.User2ID == userID || b.User1ID == userID && b.User2ID == f.UserID {
 				isBlock = true
@@ -35,7 +33,6 @@ func (uu *userUsecaseS) rm1HopFriend(ffList []*model.User, fList []*model.User) 
 
 	for _, ff := range ffList {
 		isFriend := false
-
 		for _, f := range fList {
 			if f.UserID == ff.UserID {
 				isFriend = true

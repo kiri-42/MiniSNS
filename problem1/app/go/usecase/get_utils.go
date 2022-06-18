@@ -47,13 +47,11 @@ func (uu *userUsecaseS) getFriendListExceptBlock(id int, fList []*model.User) ([
 
 func (uu *userUsecaseS) getFriendOfFriendList(fList []*model.User) ([]*model.User, error) {
 	ffList := make([]*model.User, 0)
-
 	for _, f := range fList {
 		nfList, err := uu.GetFriendList(f.UserID)
 		if err != nil {
 			return nil, err
 		}
-
 		ffList = append(ffList, nfList...)
 	}
 
@@ -62,10 +60,8 @@ func (uu *userUsecaseS) getFriendOfFriendList(fList []*model.User) ([]*model.Use
 
 func (uu *userUsecaseS) getUniqueList(fList []*model.User) []*model.User {
 	nfList := make([]*model.User, 0)
-
 	for _, f := range fList {
 		isUnique := true
-
 		for _, nf := range nfList {
 			if f.UserID == nf.UserID {
 				isUnique = false
@@ -78,4 +74,20 @@ func (uu *userUsecaseS) getUniqueList(fList []*model.User) []*model.User {
 	}
 
 	return nfList
+}
+
+func (uu *userUsecaseS) getPagingList(uList []*model.User, limit, page int) []*model.User {
+	end := limit * page
+	start := end - (limit - 1)
+	
+	nuList := make([]*model.User, 0)
+	for i, u := range uList {
+		var nu model.User
+		if start <= i+1 && i+1 <= end {
+			nu.UserID, nu.Name = u.UserID, u.Name
+			nuList = append(nuList, &nu)
+		}
+	}
+
+	return nuList
 }
