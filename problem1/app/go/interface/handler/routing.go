@@ -1,6 +1,8 @@
 package handler
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/labstack/echo/v4"
+)
 
 func Routing(e *echo.Echo, userHandler UserHandlerI) {
 	e.GET("/", userHandler.Root())
