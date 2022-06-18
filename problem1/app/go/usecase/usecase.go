@@ -90,7 +90,7 @@ func (uu *userUsecaseS) GetFriendList(uID int) ([]*model.User, error) {
 }
 
 // GetFriendOfFriendList はfriendのfriend listをuser_idで取得します。
-func (uu *userUsecaseS)  GetFriendOfFriendList(uID int) ([]*model.User, error) {
+func (uu *userUsecaseS) GetFriendOfFriendList(uID int) ([]*model.User, error) {
 	fList, err := uu.GetFriendList(uID)
 	if err != nil {
 		return nil, err
@@ -124,4 +124,3 @@ func (uu *userUsecaseS) GetFriendOfFriendListPaging(uID, limit, page int) ([]*mo
 
 	return nffList, nil
 }
-

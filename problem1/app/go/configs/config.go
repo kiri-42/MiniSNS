@@ -1,10 +1,10 @@
 package configs
 
 import (
+	"database/sql"
 	"github.com/kelseyhightower/envconfig"
 	"log"
 	"sync"
-	"database/sql"
 )
 
 var (

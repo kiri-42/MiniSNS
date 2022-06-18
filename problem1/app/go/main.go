@@ -25,7 +25,7 @@ func main() {
 	}
 	defer db.Close()
 
-	userRepository :=  infrastructure.NewUserRepository(db)
+	userRepository := infrastructure.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	userHandler := handler.NewUserHandler(userUsecase)
 

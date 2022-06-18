@@ -60,7 +60,7 @@ func (uu *userUsecaseS) getFriendOfFriendList(fList []*model.User) ([]*model.Use
 	return uu.rm1HopFriend(ffList, fList), nil
 }
 
-func (uu *userUsecaseS) getUniqueList(fList []*model.User) ([]*model.User) {
+func (uu *userUsecaseS) getUniqueList(fList []*model.User) []*model.User {
 	nfList := make([]*model.User, 0)
 
 	for _, f := range fList {

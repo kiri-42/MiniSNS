@@ -30,7 +30,7 @@ func (uu *userUsecaseS) rmBlockUser(fList []*model.User, bList []*model.Link, id
 	return nuList, nil
 }
 
-func (uu *userUsecaseS) rm1HopFriend(ffList []*model.User, fList []*model.User) ([]*model.User) {
+func (uu *userUsecaseS) rm1HopFriend(ffList []*model.User, fList []*model.User) []*model.User {
 	nffList := make([]*model.User, 0)
 
 	for _, ff := range ffList {

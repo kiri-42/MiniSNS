@@ -5,7 +5,7 @@ import (
 )
 
 func getResUser(u *model.User) resUser {
-	res := resUser {
+	res := resUser{
 		UserID: u.UserID,
 		Name:   u.Name,
 	}
@@ -16,7 +16,7 @@ func getResUser(u *model.User) resUser {
 func getResUserList(uList []*model.User) []resUser {
 	res := make([]resUser, 0)
 	for _, u := range uList {
-		user := resUser {
+		user := resUser{
 			UserID: u.UserID,
 			Name:   u.Name,
 		}

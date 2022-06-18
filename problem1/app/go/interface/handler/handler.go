@@ -28,13 +28,13 @@ func NewUserHandler(userUsecase usecase.UserUsecaseI) UserHandlerI {
 }
 
 type resUser struct {
-	UserID int     `json:"user_id"`
-	Name   string  `json:"name"`
+	UserID int    `json:"user_id"`
+	Name   string `json:"name"`
 }
 
 // Root は"/"のhttpハンドラです。
 // "mini sns"を返します
-func (uh *userHandlerS) Root() echo.HandlerFunc  {
+func (uh *userHandlerS) Root() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return c.String(http.StatusOK, "mini sns")
 	}
