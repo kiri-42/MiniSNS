@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: ポケモン図鑑
+paths:
+  "/pokemon/{name}":
+    get:
+      tags:
+        - "ポケモン情報取得API"
+      summary:
+        "ポケモン情報取得API"
+      description:
+        "指定した名前のポケモンを検索し、情報を取得します。"
+      parameters:
+        - name: "name"
+          in: "path"
+          description: "ポケモンの名前"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  no:
+                    type: "string"
+                  name:
+                    type: "string"
+                  type:
+                    type: "string"
+                  comment:
+                    type: "string"
+                example:
+                  no: "007"
+                  name: "ゼニガメ"
+                  type: "みず"
+                  comment: "こうらに とじこもり みをまもる。"
+        404:
+          desctiption: "NotFound"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  status:
+                    type: "string"
+                    example: "NOT_FOUND"
+                  message:
+                    type: "string"
+                    example: "NOT_FOUND"
