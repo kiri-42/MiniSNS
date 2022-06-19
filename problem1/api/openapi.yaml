@@ -3,20 +3,21 @@ info:
   version: 1.0.0
   title: mini_sns
 paths:
-  "/pokemon/{name}":
+  "/get_user/{user_id}":
     get:
       tags:
-        - "ポケモン情報取得API"
+        - "ユーザ情報取得API"
       summary:
-        "ポケモン情報取得API"
+        "ユーザ情報取得API"
       description:
-        "指定した名前のポケモンを検索し、情報を取得します。"
+        "指定したuser_idのユーザを検索し、情報を取得します。"
       parameters:
-        - name: "name"
+        - name: "user_id"
           in: "path"
-          description: "ポケモンの名前"
+          description: "ユーザの識別子"
           required: true
-          type: "string"
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "Success"
@@ -25,29 +26,231 @@ paths:
               schema:
                 type: "object"
                 properties:
-                  no:
-                    type: "string"
+                  user_id:
+                    type: "integer"
                   name:
                     type: "string"
-                  type:
-                    type: "string"
-                  comment:
-                    type: "string"
                 example:
-                  no: "007"
-                  name: "ゼニガメ"
-                  type: "みず"
-                  comment: "こうらに とじこもり みをまもる。"
+                  user_id: 1
+                  name: "yamada"
         404:
-          desctiption: "NotFound"
+          description: "NotFound"
           content:
             application/json:
               schema:
                 type: "object"
                 properties:
-                  status:
+                  message:
                     type: "string"
                     example: "NOT_FOUND"
+  "/get_user/list":
+    get:
+      tags:
+        - "ユーザ情報取得API"
+      summary:
+        "全ユーザ情報取得API"
+      description:
+        "全てのユーザの情報を取得します。"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  user_id:
+                    type: "integer"
+                  name:
+                    type: "string"
+                example:
+                  - user_id: 1
+                    name: "yamada"
+                  - user_id: 2
+                    name: "tanaka"
+        404:
+          description: "NotFound"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    message:
+                      type: "string"
+                      example: "NOT_FOUND"
+  "/get_user_lit_paging/{limit}/{page}":
+    get:
+      tags:
+        - "ユーザ情報取得API"
+      summary:
+        "全ユーザ情報取得API(page形式)"
+      description:
+        "全てのユーザの情報をpage形式で取得します。"
+      parameters:
+        - name: "limit"
+          in: "path"
+          description: "1ページあたりの表示件数"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "page"
+          in: "path"
+          description: "ページの位置"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                properties:
+                  user_id:
+                    type: "integer"
+                  name:
+                    type: "string"
+                example:
+                  - user_id: 1
+                    name: "yamada"
+                  - user_id: 3
+                    name: "satou"
+        404:
+          description: "NotFound"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    example: "NOT_FOUND"
+  "/get_friend_list/{user_id}":
+    get:
+      tags:
+        - "フレンド情報取得API"
+      summary:
+        "フレンド情報取得API"
+      description:
+        "指定したuser_idのユーザのフレンド情報を取得します。"
+      parameters:
+        - name: "user_id"
+          in: "path"
+          description: "ユーザの識別子"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                properties:
+                  user_id:
+                    type: "integer"
+                  name:
+                    type: "string"
+                example:
+                  - user_id: 1
+                    name: "yamada"
+                  - user_id: 3
+                    name: "satou"
+        404:
+          description: "NotFound"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    example: "NOT_FOUND"
+  "/get_friend_of_friend_list/{user_id}":
+    get:
+      tags:
+        - "フレンド情報取得API"
+      summary:
+        "フレンドのフレンド情報取得API"
+      description:
+        "指定したuser_idのユーザのフレンドのフレンド情報を取得します。"
+      parameters:
+        - name: "user_id"
+          in: "path"
+          description: "ユーザの識別子"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                properties:
+                  user_id:
+                    type: "integer"
+                  name:
+                    type: "string"
+                example:
+                  - user_id: 1
+                    name: "yamada"
+                  - user_id: 3
+                    name: "satou"
+        404:
+          description: "NotFound"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  message:
+                    type: "string"
+                    example: "NOT_FOUND"
+  "/get_friend_of_friend_list_paging/{user_id}":
+    get:
+      tags:
+        - "フレンド情報取得API"
+      summary:
+        "フレンドのフレンド情報取得API(page版)"
+      description:
+        "指定したuser_idのユーザのフレンドのフレンド情報をpage形式で取得します。"
+      parameters:
+        - name: "user_id"
+          in: "path"
+          description: "ユーザの識別子"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                properties:
+                  user_id:
+                    type: "integer"
+                  name:
+                    type: "string"
+                example:
+                  - user_id: 1
+                    name: "yamada"
+                  - user_id: 3
+                    name: "satou"
+        404:
+          description: "NotFound"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
                   message:
                     type: "string"
                     example: "NOT_FOUND"
