@@ -76,3 +76,83 @@ func TestGetUserList(t *testing.T) {
 		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
 	}
 }
+
+func TestGetUserListPaging(t *testing.T) {
+	db, err := configs.GetDB()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	defer db.Close()
+
+	e := handler.NewRouter(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/get_user_list_paging/1/1", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
+	}
+}
+
+func TestGetFriendList(t *testing.T) {
+	db, err := configs.GetDB()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	defer db.Close()
+
+	e := handler.NewRouter(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/get_friend_list/1", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
+	}
+}
+
+func TestGetFriendOfFriendList(t *testing.T) {
+	db, err := configs.GetDB()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	defer db.Close()
+
+	e := handler.NewRouter(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/get_friend_of_friend_list/1", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
+	}
+}
+
+func TestGetFriendOfFriendListPaging(t *testing.T) {
+	db, err := configs.GetDB()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	defer db.Close()
+
+	e := handler.NewRouter(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/get_friend_of_friend_list_paging/1/1/1", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
+	}
+}
