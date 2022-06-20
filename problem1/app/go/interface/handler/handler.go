@@ -46,12 +46,12 @@ func (uh *userHandlerS) GetUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		u, err := uh.userUsecase.GetUser(uID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, getResUser(u))
@@ -64,7 +64,7 @@ func (uh *userHandlerS) GetUserList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uList, err := uh.userUsecase.GetUserList()
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, getResUserList(uList))
@@ -77,17 +77,17 @@ func (uh *userHandlerS) GetUserListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		limit, err := strconv.Atoi(c.Param("limit"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		page, err := strconv.Atoi(c.Param("page"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		uList, err := uh.userUsecase.GetUserListPaging(limit, page)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, getResUserList(uList))
@@ -100,12 +100,12 @@ func (uh *userHandlerS) GetFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		fList, err := uh.userUsecase.GetFriendList(uID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, getResUserList(fList))
@@ -118,12 +118,12 @@ func (uh *userHandlerS) GetFriendOfFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		ffList, err := uh.userUsecase.GetFriendOfFriendList(uID)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, getResUserList(ffList))
@@ -136,22 +136,22 @@ func (uh *userHandlerS) GetFriendOfFriendListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		limit, err := strconv.Atoi(c.Param("limit"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		page, err := strconv.Atoi(c.Param("page"))
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusNotFound, err.Error())
 		}
 
 		ffList, err := uh.userUsecase.GetFriendOfFriendListPaging(uID, limit, page)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, getResUserList(ffList))
