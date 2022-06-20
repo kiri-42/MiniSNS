@@ -37,6 +37,26 @@ func TestRoot(t *testing.T) {
 	}
 }
 
+func TestGetUser(t *testing.T) {
+	db, err := configs.GetDB()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	defer db.Close()
+
+	e := handler.NewRouter(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/get_user/1", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
+	}
+}
+
 func TestGetUserList(t *testing.T) {
 	db, err := configs.GetDB()
 	if err != nil {
