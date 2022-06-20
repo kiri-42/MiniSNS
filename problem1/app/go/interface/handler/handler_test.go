@@ -52,6 +52,7 @@ func TestGetUser(t *testing.T) {
 	}{
 		"OK_user_id:1":              {"1", 200},
 		"NG_user_idがアルファベット":   {"a", 404},
+		"NG_user_idが空":             {"", 500},
 		"NG_存在しないuser_id1":       {"100", 500},
 		"NG_存在しないuser_id2":       {"0", 500},
 		"NG_存在しないuser_id3":       {"-1", 500},
