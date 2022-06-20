@@ -51,7 +51,7 @@ func TestGetUser(t *testing.T) {
 		wantCode int
 	}{
 		"OK_user_id:1":              {"1", 200},
-		"NG_user_idがアルファベット":   {"a", 404},
+		"NG_user_idがアルファベット":   {"a", 500},
 		"NG_user_idが空":             {"", 500},
 		"NG_存在しないuser_id1":       {"100", 500},
 		"NG_存在しないuser_id2":       {"0", 500},
@@ -108,8 +108,9 @@ func TestGetUserListPaging(t *testing.T) {
 		"OK_limit:1_page:1":                  {"1", "1", 200},
 		"OK_limit:3_page:4":                  {"3", "4", 200},
 		"OK_limit:3_page:100":                {"3", "100", 200},
-		"NG_limitがアルファベット":              {"a", "1", 404},
-		"NG_pageがアルファベット":               {"3", "a", 404},
+		"NG_limitがアルファベット":              {"a", "1", 500},
+		"NG_pageがアルファベット":               {"3", "a", 500},
+		"NG_limitが空":                        {"", "a", 500},
 	}
 
 	for name, tc := range tCases {
@@ -141,7 +142,7 @@ func TestGetFriendList(t *testing.T) {
 		wantCode int
 	}{
 		"OK_user_id:1":                  {"1", 200},
-		"NG_user_idがアルファベット":       {"a", 404},
+		"NG_user_idがアルファベット":       {"a", 500},
 	}
 
 	for name, tc := range tCases {
@@ -173,7 +174,7 @@ func TestGetFriendOfFriendList(t *testing.T) {
 		wantCode int
 	}{
 		"OK_user_id:1":                  {"1", 200},
-		"NG_user_idがアルファベット":       {"a", 404},
+		"NG_user_idがアルファベット":       {"a", 500},
 	}
 
 	for name, tc := range tCases {
@@ -207,7 +208,7 @@ func TestGetFriendOfFriendListPaging(t *testing.T) {
 		wantCode int
 	}{
 		"OK_user_id:1":                  {"2", "2", "2", 200},
-		"NG_user_idがアルファベット":       {"a", "2", "2", 404},
+		"NG_user_idがアルファベット":       {"a", "2", "2", 500},
 	}
 
 	for name, tc := range tCases {

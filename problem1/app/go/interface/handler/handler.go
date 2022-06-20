@@ -44,9 +44,12 @@ func (uh *userHandlerS) Root() echo.HandlerFunc {
 // user_idをもとにUserをjson形式で返します。
 func (uh *userHandlerS) GetUser() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if c.Param("user_id") == "" {
+			return newHTTPError(http.StatusInternalServerError, "limit is user_id")
+		}
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		u, err := uh.userUsecase.GetUser(uID)
@@ -75,14 +78,20 @@ func (uh *userHandlerS) GetUserList() echo.HandlerFunc {
 // limitとpageをもとにUser listをjson形式で返します。
 func (uh *userHandlerS) GetUserListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if c.Param("limit") == "" {
+			return newHTTPError(http.StatusInternalServerError, "limit is empty")
+		}
 		limit, err := strconv.Atoi(c.Param("limit"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
+		if c.Param("page") == "" {
+			return newHTTPError(http.StatusInternalServerError, "page is empty")
+		}
 		page, err := strconv.Atoi(c.Param("page"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		uList, err := uh.userUsecase.GetUserListPaging(limit, page)
@@ -98,9 +107,12 @@ func (uh *userHandlerS) GetUserListPaging() echo.HandlerFunc {
 // user_idをもとにfriend listをjson形式で返します。
 func (uh *userHandlerS) GetFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if c.Param("user_id") == "" {
+			return newHTTPError(http.StatusInternalServerError, "user_id is empty")
+		}
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		fList, err := uh.userUsecase.GetFriendList(uID)
@@ -116,9 +128,12 @@ func (uh *userHandlerS) GetFriendList() echo.HandlerFunc {
 // user_idをもとにfriendのfriend listをjson形式で返します。
 func (uh *userHandlerS) GetFriendOfFriendList() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if c.Param("user_id") == "" {
+			return newHTTPError(http.StatusInternalServerError, "user_id is empty")
+		}
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		ffList, err := uh.userUsecase.GetFriendOfFriendList(uID)
@@ -134,19 +149,28 @@ func (uh *userHandlerS) GetFriendOfFriendList() echo.HandlerFunc {
 // user_idとlimit,pageをもとにfriendのfriend listをjson形式で返します。
 func (uh *userHandlerS) GetFriendOfFriendListPaging() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if c.Param("user_id") == "" {
+			return newHTTPError(http.StatusInternalServerError, "user_id is empty")
+		}
 		uID, err := strconv.Atoi(c.Param("user_id"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
+		if c.Param("limit") == "" {
+			return newHTTPError(http.StatusInternalServerError, "limit is empty")
+		}
 		limit, err := strconv.Atoi(c.Param("limit"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
+		if c.Param("page") == "" {
+			return newHTTPError(http.StatusInternalServerError, "page is empty")
+		}
 		page, err := strconv.Atoi(c.Param("page"))
 		if err != nil {
-			return newHTTPError(http.StatusNotFound, err.Error())
+			return newHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		ffList, err := uh.userUsecase.GetFriendOfFriendListPaging(uID, limit, page)
