@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"problem1/domain/model"
 )
 
@@ -76,10 +77,17 @@ func (uu *userUsecaseS) getUniqueList(fList []*model.User) []*model.User {
 	return nfList
 }
 
-func (uu *userUsecaseS) getPagingList(uList []*model.User, limit, page int) []*model.User {
+func (uu *userUsecaseS) getPagingList(uList []*model.User, limit, page int) ([]*model.User, error) {
+	if limit <= 0 {
+		return nil, errors.New("limit is invalid")
+	}
+	if page <= 0 {
+		return nil, errors.New("page is invalid")
+	}
+
 	end := limit * page
 	start := end - (limit - 1)
-	
+
 	nuList := make([]*model.User, 0)
 	for i, u := range uList {
 		var nu model.User
@@ -89,5 +97,5 @@ func (uu *userUsecaseS) getPagingList(uList []*model.User, limit, page int) []*m
 		}
 	}
 
-	return nuList
+	return nuList, nil
 }

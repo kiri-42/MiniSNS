@@ -55,7 +55,12 @@ func (uu *userUsecaseS) GetUserListPaging(limit, page int) ([]*model.User, error
 		return nil, err
 	}
 
-	return uu.getPagingList(uList, limit, page), nil
+	uList, err = uu.getPagingList(uList, limit, page)
+	if err != nil {
+		return nil, err
+	}
+
+	return uList, nil
 }
 
 // GetFriendList はfriend listをuser_idで取得します。
@@ -100,5 +105,10 @@ func (uu *userUsecaseS) GetFriendOfFriendListPaging(uID, limit, page int) ([]*mo
 		return nil, err
 	}
 
-	return uu.getPagingList(ffList, limit, page), nil
+	ffList, err = uu.getPagingList(ffList, limit, page)
+	if err != nil {
+		return nil, err
+	}
+
+	return ffList, nil
 }
