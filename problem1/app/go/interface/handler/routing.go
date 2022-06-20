@@ -19,7 +19,6 @@ func NewRouter(db *sql.DB) *echo.Echo {
 	e := echo.New()
 	e.HTTPErrorHandler = HttpErrorHandler
 	e.Use(middleware.Recover()) // httpハンドラ内でpanicしてもサーバーが落ちないようにする
-	e.Use(middleware.Logger())  // httpリクエストのロクを出力
 
 	Routing(e, userHandler)
 

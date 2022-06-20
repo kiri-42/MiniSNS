@@ -2,10 +2,8 @@ package handler_test
 
 import (
 	_ "database/sql"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -18,14 +16,14 @@ import (
 func TestRoot(t *testing.T) {
 	db, err := configs.GetDB()
 	if err != nil {
-		fmt.Fprintln(os.Stdout, err.Error())
+		t.Error(err.Error())
 		return
 	}
 	defer db.Close()
 
 	e := handler.NewRouter(db)
 
-	req := httptest.NewRequest("GET", "/", nil)
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
 
 	e.ServeHTTP(rec, req)
@@ -36,5 +34,25 @@ func TestRoot(t *testing.T) {
 
 	if rec.Body.String() != "mini sns" {
 		t.Errorf("got: %s want: %sn", rec.Body.String(), "mini sns")
+	}
+}
+
+func TestGetUserList(t *testing.T) {
+	db, err := configs.GetDB()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	defer db.Close()
+
+	e := handler.NewRouter(db)
+
+	req := httptest.NewRequest(http.MethodGet, "/get_user_list", nil)
+	rec := httptest.NewRecorder()
+
+	e.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
 	}
 }
