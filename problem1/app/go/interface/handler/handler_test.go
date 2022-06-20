@@ -106,9 +106,9 @@ func TestGetUserListPaging(t *testing.T) {
 	}{
 		"OK_limit:1_page:1":                  {"1", "1", 200},
 		"OK_limit:3_page:4":                  {"3", "4", 200},
+		"OK_limit:3_page:100":                {"3", "100", 200},
 		"NG_limitがアルファベット":              {"a", "1", 404},
 		"NG_pageがアルファベット":               {"3", "a", 404},
-		// "NG_pageが上限を超えている":             {"3", "100", 404},
 	}
 
 	for name, tc := range tCases {
