@@ -28,14 +28,12 @@ func newHTTPError(code int, msg string) *httpError {
 func HttpErrorHandler(err error, c echo.Context) {
 	var (
 		code = http.StatusInternalServerError
-		msg  string
+		msg = ""
 	)
 
 	if he, ok := err.(*httpError); ok {
 		code = he.code
 		msg = he.Message
-	} else {
-		msg = http.StatusText(code)
 	}
 
 	if !c.Response().Committed {
