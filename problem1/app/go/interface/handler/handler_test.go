@@ -45,12 +45,29 @@ func TestGetUser(t *testing.T) {
 
 	e := handler.NewRouter(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/get_user/1", nil)
-	rec := httptest.NewRecorder()
+	path := "/get_user/"
+	tCases := map[string]struct {
+		inUserID string
+		wantCode int
+	}{
+		"OK_user_id:1":              {"1", 200},
+		"NG_user_idがアルファベット":   {"a", 404},
+		"NG_存在しないuser_id1":       {"100", 500},
+		"NG_存在しないuser_id2":       {"0", 500},
+		"NG_存在しないuser_id3":       {"-1", 500},
+	}
 
-	e.ServeHTTP(rec, req)
+	for name, tc := range tCases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			url := path + tc.inUserID
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			rec := httptest.NewRecorder()
+			e.ServeHTTP(rec, req)
 
-	testResponseCode(t, rec.Code, http.StatusOK)
+			testResponseCode(t, rec.Code, tc.wantCode)
+		})
+	}
 }
 
 func TestGetUserList(t *testing.T) {
@@ -81,12 +98,30 @@ func TestGetUserListPaging(t *testing.T) {
 
 	e := handler.NewRouter(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/get_user_list_paging/1/1", nil)
-	rec := httptest.NewRecorder()
+	path := "/get_user_list_paging/"
+	tCases := map[string]struct {
+		inLimit  string
+		inPage   string
+		wantCode int
+	}{
+		"OK_limit:1_page:1":                  {"1", "1", 200},
+		"OK_limit:3_page:4":                  {"3", "4", 200},
+		"NG_limitがアルファベット":              {"a", "1", 404},
+		"NG_pageがアルファベット":               {"3", "a", 404},
+		// "NG_pageが上限を超えている":             {"3", "100", 404},
+	}
 
-	e.ServeHTTP(rec, req)
+	for name, tc := range tCases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			url := path + tc.inLimit + "/" + tc.inPage
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			rec := httptest.NewRecorder()
+			e.ServeHTTP(rec, req)
 
-	testResponseCode(t, rec.Code, http.StatusOK)
+			testResponseCode(t, rec.Code, tc.wantCode)
+		})
+	}
 }
 
 func TestGetFriendList(t *testing.T) {
@@ -99,12 +134,26 @@ func TestGetFriendList(t *testing.T) {
 
 	e := handler.NewRouter(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/get_friend_list/1", nil)
-	rec := httptest.NewRecorder()
+	path := "/get_friend_list/"
+	tCases := map[string]struct {
+		in  string
+		wantCode int
+	}{
+		"OK_user_id:1":                  {"1", 200},
+		"NG_user_idがアルファベット":       {"a", 404},
+	}
 
-	e.ServeHTTP(rec, req)
+	for name, tc := range tCases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			url := path + tc.in
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			rec := httptest.NewRecorder()
+			e.ServeHTTP(rec, req)
 
-	testResponseCode(t, rec.Code, http.StatusOK)
+			testResponseCode(t, rec.Code, tc.wantCode)
+		})
+	}
 }
 
 func TestGetFriendOfFriendList(t *testing.T) {
@@ -117,12 +166,26 @@ func TestGetFriendOfFriendList(t *testing.T) {
 
 	e := handler.NewRouter(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/get_friend_of_friend_list/1", nil)
-	rec := httptest.NewRecorder()
+	path := "/get_friend_of_friend_list/"
+	tCases := map[string]struct {
+		in  string
+		wantCode int
+	}{
+		"OK_user_id:1":                  {"1", 200},
+		"NG_user_idがアルファベット":       {"a", 404},
+	}
 
-	e.ServeHTTP(rec, req)
+	for name, tc := range tCases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			url := path + tc.in
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			rec := httptest.NewRecorder()
+			e.ServeHTTP(rec, req)
 
-	testResponseCode(t, rec.Code, http.StatusOK)
+			testResponseCode(t, rec.Code, tc.wantCode)
+		})
+	}
 }
 
 func TestGetFriendOfFriendListPaging(t *testing.T) {
@@ -135,12 +198,28 @@ func TestGetFriendOfFriendListPaging(t *testing.T) {
 
 	e := handler.NewRouter(db)
 
-	req := httptest.NewRequest(http.MethodGet, "/get_friend_of_friend_list_paging/1/1/1", nil)
-	rec := httptest.NewRecorder()
+	path := "/get_friend_of_friend_list_paging/"
+	tCases := map[string]struct {
+		inUserID string
+		inLimit  string
+		inPage   string
+		wantCode int
+	}{
+		"OK_user_id:1":                  {"2", "2", "2", 200},
+		"NG_user_idがアルファベット":       {"a", "2", "2", 404},
+	}
 
-	e.ServeHTTP(rec, req)
+	for name, tc := range tCases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			url := path + tc.inUserID + "/" + tc.inLimit + "/" + tc.inPage
+			req := httptest.NewRequest(http.MethodGet, url, nil)
+			rec := httptest.NewRecorder()
+			e.ServeHTTP(rec, req)
 
-	testResponseCode(t, rec.Code, http.StatusOK)
+			testResponseCode(t, rec.Code, tc.wantCode)
+		})
+	}
 }
 
 func testResponseCode(t *testing.T, got, want int) {
