@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 	"strconv"
@@ -25,6 +26,16 @@ func main() {
 	}
 	defer db.Close()
 
+	e := newRouter(db)
+	if err != nil {
+		fmt.Fprintln(os.Stdout, err.Error())
+		return
+	}
+
+	e.Logger.Fatal(e.Start(":" + strconv.Itoa(conf.Server.Port)))
+}
+
+func newRouter(db *sql.DB) *echo.Echo {
 	userRepository := infrastructure.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	userHandler := handler.NewUserHandler(userUsecase)
@@ -35,5 +46,6 @@ func main() {
 	e.Use(middleware.Logger())  // httpリクエストのロクを出力
 
 	handler.Routing(e, userHandler)
-	e.Logger.Fatal(e.Start(":" + strconv.Itoa(conf.Server.Port)))
+
+	return e
 }
