@@ -28,9 +28,7 @@ func TestRoot(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
-	}
+	testResponseCode(t, rec.Code, http.StatusOK)
 
 	if rec.Body.String() != "mini sns" {
 		t.Errorf("got: %s want: %sn", rec.Body.String(), "mini sns")
@@ -52,9 +50,7 @@ func TestGetUser(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
-	}
+	testResponseCode(t, rec.Code, http.StatusOK)
 }
 
 func TestGetUserList(t *testing.T) {
@@ -72,9 +68,7 @@ func TestGetUserList(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
-	}
+	testResponseCode(t, rec.Code, http.StatusOK)
 }
 
 func TestGetUserListPaging(t *testing.T) {
@@ -92,9 +86,7 @@ func TestGetUserListPaging(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
-	}
+	testResponseCode(t, rec.Code, http.StatusOK)
 }
 
 func TestGetFriendList(t *testing.T) {
@@ -112,9 +104,7 @@ func TestGetFriendList(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
-	}
+	testResponseCode(t, rec.Code, http.StatusOK)
 }
 
 func TestGetFriendOfFriendList(t *testing.T) {
@@ -132,9 +122,7 @@ func TestGetFriendOfFriendList(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
-	}
+	testResponseCode(t, rec.Code, http.StatusOK)
 }
 
 func TestGetFriendOfFriendListPaging(t *testing.T) {
@@ -152,7 +140,13 @@ func TestGetFriendOfFriendListPaging(t *testing.T) {
 
 	e.ServeHTTP(rec, req)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("got: %d want: %d\n", rec.Code, http.StatusOK)
+	testResponseCode(t, rec.Code, http.StatusOK)
+}
+
+func testResponseCode(t *testing.T, got, want int) {
+	t.Helper()
+
+	if got != want {
+		t.Errorf("got: %d want: %d\n", got, want)
 	}
 }
