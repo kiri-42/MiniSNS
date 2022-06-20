@@ -33,11 +33,6 @@ func main() {
 	e.HTTPErrorHandler = handler.HttpErrorHandler
 	e.Use(middleware.Recover()) // httpハンドラ内でpanicしてもサーバーが落ちないようにする
 	e.Use(middleware.Logger())  // httpリクエストのロクを出力
-	// e.Use(func(h echo.HandlerFunc) echo.HandlerFunc {
-	// 		return func(c echo.Context) error {
-	// 				return h(&handler.Context{c})
-	// 		}
-	// })
 
 	handler.Routing(e, userHandler)
 	e.Logger.Fatal(e.Start(":" + strconv.Itoa(conf.Server.Port)))
