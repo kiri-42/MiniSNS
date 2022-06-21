@@ -28,7 +28,7 @@ func newHTTPError(code int, msg string) *httpError {
 func HttpErrorHandler(err error, c echo.Context) {
 	var (
 		code = http.StatusInternalServerError
-		msg = ""
+		msg  = ""
 	)
 
 	if he, ok := err.(*httpError); ok {

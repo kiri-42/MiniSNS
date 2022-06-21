@@ -50,12 +50,12 @@ func TestGetUser(t *testing.T) {
 		inUserID string
 		wantCode int
 	}{
-		"OK_user_id:1":              {"1", 200},
-		"NG_user_idがアルファベット":   {"a", 500},
-		"NG_user_idが空":             {"", 500},
-		"NG_存在しないuser_id1":       {"100", 500},
-		"NG_存在しないuser_id2":       {"0", 500},
-		"NG_存在しないuser_id3":       {"-1", 500},
+		"OK_user_id:1":       {"1", 200},
+		"NG_user_idがアルファベット": {"a", 500},
+		"NG_user_idが空":       {"", 500},
+		"NG_存在しないuser_id1":   {"100", 500},
+		"NG_存在しないuser_id2":   {"0", 500},
+		"NG_存在しないuser_id3":   {"-1", 500},
 	}
 
 	for name, tc := range tCases {
@@ -105,17 +105,17 @@ func TestGetUserListPaging(t *testing.T) {
 		inPage   string
 		wantCode int
 	}{
-		"OK_limit:1_page:1":       {"1", "1", 200},
-		"OK_limit:3_page:4":       {"3", "4", 200},
-		"OK_limit:3_page:100":     {"3", "100", 200},
-		"NG_limitがアルファベット":   {"a", "1", 500},
-		"NG_pageがアルファベット":    {"3", "a", 500},
-		"NG_存在しないlimit1":       {"0", "4", 500},
-		"NG_存在しないlimit2":       {"-1", "4", 500},
-		"NG_存在しないpage1":        {"3", "0", 500},
-		"NG_存在しないpage2":        {"3", "-1", 500},
-		"NG_limitが空":             {"", "a", 500},
-		"NG_pageが空":              {"3", "", 500},
+		"OK_limit:1_page:1":   {"1", "1", 200},
+		"OK_limit:3_page:4":   {"3", "4", 200},
+		"OK_limit:3_page:100": {"3", "100", 200},
+		"NG_limitがアルファベット":    {"a", "1", 500},
+		"NG_pageがアルファベット":     {"3", "a", 500},
+		"NG_存在しないlimit1":      {"0", "4", 500},
+		"NG_存在しないlimit2":      {"-1", "4", 500},
+		"NG_存在しないpage1":       {"3", "0", 500},
+		"NG_存在しないpage2":       {"3", "-1", 500},
+		"NG_limitが空":          {"", "a", 500},
+		"NG_pageが空":           {"3", "", 500},
 	}
 
 	for name, tc := range tCases {
@@ -143,15 +143,15 @@ func TestGetFriendList(t *testing.T) {
 
 	path := "/get_friend_list/"
 	tCases := map[string]struct {
-		in  string
+		in       string
 		wantCode int
 	}{
-		"OK_user_id:1":              {"1", 200},
-		"NG_存在しないuser_id1":       {"0", 500},
-		"NG_存在しないuser_id2":       {"-1", 500},
-		"NG_存在しないuser_id3":       {"100", 500},
-		"NG_user_idがアルファベット":   {"a", 500},
-		"NG_user_idが空":   {"", 500},
+		"OK_user_id:1":       {"1", 200},
+		"NG_存在しないuser_id1":   {"0", 500},
+		"NG_存在しないuser_id2":   {"-1", 500},
+		"NG_存在しないuser_id3":   {"100", 500},
+		"NG_user_idがアルファベット": {"a", 500},
+		"NG_user_idが空":       {"", 500},
 	}
 
 	for name, tc := range tCases {
@@ -179,15 +179,15 @@ func TestGetFriendOfFriendList(t *testing.T) {
 
 	path := "/get_friend_of_friend_list/"
 	tCases := map[string]struct {
-		in  string
+		in       string
 		wantCode int
 	}{
-		"OK_user_id:1":              {"1", 200},
-		"NG_存在しないuser_id1":       {"0", 500},
-		"NG_存在しないuser_id2":       {"-1", 500},
-		"NG_存在しないuser_id3":       {"100", 500},
-		"NG_user_idがアルファベット":   {"a", 500},
-		"NG_user_idが空":             {"", 500},
+		"OK_user_id:1":       {"1", 200},
+		"NG_存在しないuser_id1":   {"0", 500},
+		"NG_存在しないuser_id2":   {"-1", 500},
+		"NG_存在しないuser_id3":   {"100", 500},
+		"NG_user_idがアルファベット": {"a", 500},
+		"NG_user_idが空":       {"", 500},
 	}
 
 	for name, tc := range tCases {
@@ -220,18 +220,18 @@ func TestGetFriendOfFriendListPaging(t *testing.T) {
 		inPage   string
 		wantCode int
 	}{
-		"OK_user_id:1":              {"1", "1", "1", 200},
-		"OK_user_id:2":              {"3", "3", "3", 200},
-		"NG_存在しないuser_id1":       {"0", "3", "3", 500},
-		"NG_存在しないuser_id2":       {"-1", "3", "3", 500},
-		"NG_存在しないuser_id3":       {"100", "3", "3", 500},
-		"NG_存在しないlimit1":         {"3", "0", "3", 500},
-		"NG_存在しないlimit2":         {"3", "-1", "3", 500},
-		"NG_存在しないpage1":          {"3", "3", "0", 500},
-		"NG_存在しないpage2":          {"3", "3", "-1", 500},
-		"NG_user_idが空":             {"", "3", "3", 500},
-		"NG_limitが空":               {"3", "", "3", 500},
-		"NG_pageが空":                {"3", "3", "", 500},
+		"OK_user_id:1":     {"1", "1", "1", 200},
+		"OK_user_id:2":     {"3", "3", "3", 200},
+		"NG_存在しないuser_id1": {"0", "3", "3", 500},
+		"NG_存在しないuser_id2": {"-1", "3", "3", 500},
+		"NG_存在しないuser_id3": {"100", "3", "3", 500},
+		"NG_存在しないlimit1":   {"3", "0", "3", 500},
+		"NG_存在しないlimit2":   {"3", "-1", "3", 500},
+		"NG_存在しないpage1":    {"3", "3", "0", 500},
+		"NG_存在しないpage2":    {"3", "3", "-1", 500},
+		"NG_user_idが空":     {"", "3", "3", 500},
+		"NG_limitが空":       {"3", "", "3", 500},
+		"NG_pageが空":        {"3", "3", "", 500},
 	}
 
 	for name, tc := range tCases {
