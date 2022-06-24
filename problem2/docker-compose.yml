@@ -30,23 +30,19 @@ services:
       - ./docroot:/usr/share/nginx/html
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-#  app:
-#    container_name: minimal_sns_app
-# NOTE: for ruby
-#    build: app/ruby
-#    volumes:
-#      - socket:/var/run/unicorn/
-# NOTE: for go
-#    build: app/go
-#    volumes:
-#      - ./app/go:/app
-#    networks:
-#      - front
-#      - back
-#    environment:
-#      TZ: "Asia/Tokyo"
+  # app:
+  #   container_name: minimal_sns_app
+  #   build: app/go
+  #   volumes:
+  #     - ./app/go:/app
+  #   networks:
+  #     - front
+  #     - back
+  #   environment:
+  #     TZ: "Asia/Tokyo"
   db:
     image: mysql:latest
+    platform: linux/amd64
     container_name: db
     hostname: db
     networks:
@@ -56,6 +52,6 @@ services:
       - ./mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
       - ./mysql/0_init.sql:/docker-entrypoint-initdb.d/0_init.sql
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: app
       TZ: "Asia/Tokyo"
